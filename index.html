@@ -917,7 +917,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 
     <!-- ===================== HOME PAGE ===================== -->
     <div class="page" id="page-home">
-      <div class="home-enter-wrap" id="home-enter-wrap" style="display:none">
+      <div class="home-enter-wrap" id="home-enter-wrap">
         <div class="he-logo">
           <svg viewBox="0 0 200 140" class="iox-logo-svg">
             <text x="12" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">I</text>
@@ -931,7 +931,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
         <button class="home-enter-btn" id="home-enter-btn">Explore Now</button>
       </div>
 
-      <div id="home-content">
+      <div id="home-content" style="display:none">
         <div class="chips-scroll mb-12">
           <button class="chip active" data-filter="trending"><svg width="14" height="14"><use href="#i-trending"/></svg>Trending</button>
           <button class="chip" data-filter="movies"><svg width="14" height="14"><use href="#i-film"/></svg>Movies</button>
@@ -1840,7 +1840,7 @@ function renderSkeletonGrid(id,n=8){
 $('#home-enter-btn').addEventListener('click',()=>{
   showPageTransition();
   setTimeout(()=>{
-    state.homeEntered=true;
+    state.homeEntered=false;
     $('#home-enter-wrap').style.display='none';
     $('#home-content').style.display='block';
     loadHome().then(()=>{
