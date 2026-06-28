@@ -1,0 +1,3134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f0f9ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>IOX VAULT</title>
+<link rel="icon" type="image/png" href="/iox-logo.png">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);background-attachment:fixed;color:#0f172a;line-height:1.5;overflow-x:hidden;min-height:100dvh;scrollbar-width:none}
+body::-webkit-scrollbar{width:0;height:0}
+
+/* ============================================================
+   SKY BLUE LIGHT THEME VARIABLES
+   ============================================================ */
+:root{
+  --bg:#f0f9ff;
+  --bg2:rgba(224,242,254,0.8);
+  --bg3:#e0f2fe;
+  --surface:rgba(255,255,255,0.75);
+  --glass-border:rgba(14,165,233,0.12);
+  --glass-shadow:0 8px 32px rgba(14,165,233,0.08);
+  --primary:#0ea5e9;
+  --primary-glow:rgba(14,165,233,0.25);
+  --accent:#6366f1;
+  --accent-glow:rgba(99,102,241,0.2);
+  --success:#22c55e;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+  --text:#0f172a;
+  --text2:#475569;
+  --text3:#94a3b8;
+  --text-inverse:#f1f5f9;
+  --header-h:56px;
+  --nav-h:64px;
+  --radius:16px;
+  --radius-lg:20px;
+  --radius-sm:10px;
+  --card:#ffffff;
+  --card-shadow:0 2px 12px rgba(14,165,233,0.06),0 1px 3px rgba(0,0,0,0.04);
+  --card-shadow-hover:0 12px 40px rgba(14,165,233,0.12),0 4px 12px rgba(0,0,0,0.06);
+  --logo-red:#dc2626;
+  --logo-red-glow:rgba(220,38,38,0.4);
+  --logo-silver:#c0c0c0;
+}
+
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:var(--primary);text-decoration:none}
+input,textarea{font-family:inherit;font-size:14px;border:none;outline:none;background:transparent;color:var(--text)}
+textarea{resize:none}
+ul,ol{list-style:none}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideRightOut{from{transform:translateX(0)}to{transform:translateX(100%)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse-ring{0%{transform:scale(0.8);opacity:1}100%{transform:scale(1.4);opacity:0}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px var(--primary-glow)}50%{box-shadow:0 0 40px var(--primary-glow),0 0 60px var(--accent-glow)}}
+@keyframes toastIn{from{transform:translateY(120px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes toastOut{from{transform:translateY(0);opacity:1}to{transform:translateY(120px);opacity:0}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes shimmerLoad{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes counterRotate{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+@keyframes svgPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0.85}}
+@keyframes svgGlow{0%,100%{filter:drop-shadow(0 0 8px var(--logo-red-glow))}50%{filter:drop-shadow(0 0 20px var(--logo-red-glow)) drop-shadow(0 0 30px var(--primary-glow))}}
+@keyframes slideInUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes slideInLeft{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes tabLoad{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardPop{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes enterPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes shimmerCard{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes sidebarItemIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes commentSlide{from{transform:translateY(15px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pageTransitionIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+@keyframes pageTransitionOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.1)}}
+@keyframes logoSpin{0%{transform:rotate(0deg)scale(1)}50%{transform:rotate(180deg)scale(1.15)}100%{transform:rotate(360deg)scale(1)}}
+@keyframes borderGlow{0%,100%{border-color:rgba(14,165,233,0.2)}50%{border-color:rgba(14,165,233,0.6)}}
+
+.anim-fade{animation:fadeIn .3s ease}
+.anim-fade-up{animation:fadeInUp .4s ease}
+.anim-scale{animation:scaleIn .3s ease}
+.anim-tab-load{animation:tabLoad .35s ease}
+.anim-card-pop{animation:cardPop .35s ease}
+.anim-comment-slide{animation:commentSlide .3s ease}
+
+/* ============================================================
+   PAGE TRANSITION OVERLAY
+   ============================================================ */
+#page-transition{position:fixed;inset:0;z-index:99998;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;pointer-events:none}
+#page-transition.active{opacity:1;visibility:visible;pointer-events:all}
+#page-transition .pt-logo{width:80px;height:80px;animation:logoSpin .5s ease-in-out}
+#page-transition .pt-logo svg{width:100%;height:100%}
+
+/* ============================================================
+   GLASSMORPHISM UTILITIES (Light Mode Adapted)
+   ============================================================ */
+.glass{background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow)}
+.glass-card{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(14,165,233,0.1);box-shadow:0 4px 24px rgba(14,165,233,0.06);border-radius:var(--radius)}
+.glass-strong{background:rgba(255,255,255,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(14,165,233,0.15)}
+
+/* ============================================================
+   LOADER / SPLASH SCREEN WITH IOX VAULT LOGO
+   ============================================================ */
+#loader{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-svg-wrap{width:120px;height:120px;margin-bottom:24px;position:relative;animation:svgPulse 2s ease-in-out infinite}
+.loader-svg-wrap svg{width:100%;height:100%;animation:svgGlow 2s ease-in-out infinite}
+.loader-svg-ring{position:absolute;inset:-16px;border:2px solid transparent;border-top-color:var(--logo-red);border-right-color:var(--primary);border-radius:50%;animation:rotate 2s linear infinite}
+.loader-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:32px;background:linear-gradient(90deg,var(--logo-red),var(--logo-silver),var(--primary));background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;opacity:0;transform:translateY(10px);transition:all .5s ease}
+.loader-title.visible{opacity:1;transform:translateY(0)}
+.loader-sub{font-size:13px;color:var(--text3);opacity:0;transition:opacity .4s ease .2s;font-weight:500}
+.loader-sub.visible{opacity:1}
+.loader-version{position:absolute;bottom:24px;font-size:11px;color:var(--text3);letter-spacing:1px;font-family:monospace}
+
+/* ============================================================
+   IOX VAULT SVG LOGO COMPONENT
+   ============================================================ */
+.iox-logo-svg{display:block}
+.iox-logo-svg .iox-letter{fill:url(#ioxSilver);font-family:'Outfit',sans-serif;font-weight:900}
+.iox-logo-svg .iox-o-ring{fill:none;stroke:url(#ioxSilver);stroke-width:3}
+.iox-logo-svg .iox-o-play{fill:var(--logo-red);filter:drop-shadow(0 0 4px var(--logo-red-glow))}
+.iox-logo-svg .vault-text{fill:url(#ioxSilver);font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:6px}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app{min-height:100dvh;display:flex;flex-direction:column;position:relative}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#header{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:100;display:flex;align-items:center;padding:0 16px;gap:12px}
+.header-logo-wrap{display:flex;align-items:center;gap:8px;flex:1}
+.header-logo-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--logo-red);filter:drop-shadow(0 0 8px var(--logo-red-glow))}
+.header-logo-icon svg{width:100%;height:100%}
+.header-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.5px;color:var(--text)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text2);transition:all .2s}
+.header-btn:active{transform:scale(0.92);background:var(--bg3)}
+.header-admin-badge{background:linear-gradient(135deg,var(--warning),#fbbf24);color:#0f172a;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;margin-left:8px;letter-spacing:.5px}
+
+/* ============================================================
+   SIDEBAR - PRO with subtle animations
+   ============================================================ */
+#sidebar-overlay{position:fixed;inset:0;z-index:250;background:rgba(15,23,42,0.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:all .35s ease}
+#sidebar-overlay.open{opacity:1;visibility:visible}
+#sidebar{position:fixed;top:0;right:0;bottom:0;width:300px;z-index:260;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.98));backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-left:1px solid var(--glass-border);transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(14,165,233,0.1)}
+#sidebar.open{transform:translateX(0)}
+.sidebar-header{display:flex;align-items:center;padding:20px 16px;border-bottom:1px solid var(--glass-border);gap:14px;position:relative;overflow:hidden}
+.sidebar-header::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:0.3;pointer-events:none}
+.sidebar-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;overflow:hidden;flex-shrink:0;box-shadow:0 0 20px var(--primary-glow);border:2px solid rgba(255,255,255,0.5);position:relative;z-index:1}
+.sidebar-avatar img{width:100%;height:100%;object-fit:cover}
+.sidebar-user-info{flex:1;min-width:0;position:relative;z-index:1}
+.sidebar-name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.sidebar-handle{font-size:12px;color:var(--text3)}
+.sidebar-uid{font-family:monospace;font-size:10px;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:8px;margin-top:4px;display:inline-block}
+.sidebar-body{flex:1;overflow-y:auto;padding:12px 0}
+.sidebar-section{margin-bottom:6px;opacity:0;transform:translateX(20px);transition:all .3s ease}
+#sidebar.open .sidebar-section{opacity:1;transform:translateX(0)}
+#sidebar.open .sidebar-section:nth-child(1){transition-delay:0.05s}
+#sidebar.open .sidebar-section:nth-child(2){transition-delay:0.1s}
+#sidebar.open .sidebar-section:nth-child(3){transition-delay:0.15s}
+#sidebar.open .sidebar-section:nth-child(4){transition-delay:0.2s}
+.sidebar-section-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;padding:10px 16px 6px}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s ease;border-radius:0;margin:0 8px;border-left:3px solid transparent}
+.sidebar-item:hover{background:rgba(14,165,233,0.06);color:var(--text);border-left-color:var(--primary)}
+.sidebar-item svg{width:20px;height:20px;color:var(--text3);flex-shrink:0;transition:color .2s}
+.sidebar-item:hover svg{color:var(--primary)}
+.sidebar-item:active{transform:scale(0.98)}
+.sidebar-footer{padding:16px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--text3);text-align:center;line-height:1.6}
+.sidebar-dev-card{background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px;margin:0 12px 12px}
+.sidebar-dev-card h4{font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px;color:var(--text)}
+.sidebar-dev-card p{font-size:11px;color:var(--text2);line-height:1.5}
+.sidebar-dev-card a{color:var(--primary);font-weight:600}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);z-index:100;padding-bottom:env(safe-area-inset-bottom,0);display:flex;align-items:center;justify-content:space-around;border-top:1px solid var(--glass-border);background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;transition:all .25s ease;position:relative;color:var(--text3)}
+.nav-item svg{width:22px;height:22px;transition:all .25s ease}
+.nav-item span{font-size:11px;font-weight:600;transition:all .25s ease}
+.nav-item.active{color:var(--primary)}
+.nav-item.active svg{transform:translateY(-2px);filter:drop-shadow(0 2px 6px var(--primary-glow))}
+.nav-item.active span{font-weight:700}
+.nav-item:active{opacity:.7}
+.nav-indicator{position:absolute;bottom:8px;width:24px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:all .3s cubic-bezier(.4,0,.2,1);opacity:0;box-shadow:0 0 8px var(--primary-glow)}
+.nav-item.active .nav-indicator{opacity:1}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+#main-content{flex:1;margin-top:var(--header-h);margin-bottom:var(--nav-h);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;contain:layout;scrollbar-width:none}
+#main-content::-webkit-scrollbar{width:0;height:0}
+.page{padding:16px;display:none;animation:fadeInUp .35s ease}
+.page.active{display:block}
+.container{width:100%;max-width:1200px;margin:0 auto;padding:0 16px}
+@media(min-width:768px){.container{padding:0 24px}}
+
+/* ============================================================
+   PREMIUM CARDS & COMPONENTS
+   ============================================================ */
+.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--card-shadow);contain:layout style paint}
+.card-hover:active{transform:scale(0.97)}
+@media(hover:hover){.card-hover:hover{transform:translateY(-6px);box-shadow:var(--card-shadow-hover)}}
+
+/* Score badge - golden with star */
+.score-badge{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px;z-index:2;box-shadow:0 2px 12px rgba(251,191,36,0.35);display:flex;align-items:center;gap:3px}
+.score-badge svg{width:10px;height:10px;fill:currentColor}
+
+/* Format badge */
+.format-badge{position:absolute;bottom:8px;left:8px;background:rgba(15,23,42,0.75);backdrop-filter:blur(8px);color:#f1f5f9;font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;z-index:2;border:1px solid rgba(255,255,255,0.1)}
+
+/* Status badge */
+.status-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.3px}
+.status-RELEASING{background:rgba(34,197,94,0.12);color:#16a34a}
+.status-FINISHED{background:rgba(14,165,233,0.12);color:#0284c7}
+.status-NOT_YET_RELEASED{background:rgba(99,102,241,0.12);color:#4f46e5}
+.status-CANCELLED{background:rgba(239,68,68,0.12);color:#dc2626}
+.status-HIATUS{background:rgba(245,158,11,0.12);color:#d97706}
+
+/* ============================================================
+   PREMIUM ANIME CARD
+   ============================================================ */
+.anime-card{width:150px;flex-shrink:0;cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.anime-card .poster-wrap{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:2/3;background:linear-gradient(135deg,var(--bg3),#dbeafe);box-shadow:var(--card-shadow);transition:all .35s cubic-bezier(.4,0,.2,1);border:1px solid rgba(14,165,233,0.08)}
+.anime-card .poster-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.75) 0%,rgba(15,23,42,0.2) 30%,transparent 60%);opacity:0;transition:opacity .35s ease;pointer-events:none;border-radius:var(--radius)}
+.anime-card:hover .poster-wrap{transform:translateY(-6px);box-shadow:var(--card-shadow-hover),0 0 20px rgba(14,165,233,0.12);border-color:rgba(14,165,233,0.25)}
+.anime-card:hover .poster-wrap::after{opacity:1}
+.anime-card .poster-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.anime-card:hover .poster-wrap img{transform:scale(1.08)}
+.anime-card .card-title-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;z-index:3;opacity:0;transform:translateY(8px);transition:all .35s ease;pointer-events:none}
+.anime-card:hover .card-title-overlay{opacity:1;transform:translateY(0)}
+.anime-card .card-title-overlay-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;line-height:1.3;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.anime-card .card-title{margin-top:10px;font-size:13px;font-weight:700;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text);font-family:'Outfit',sans-serif}
+.anime-card .card-meta{font-size:11px;color:var(--text3);margin-top:4px;font-weight:500}
+.anime-card .card-score{display:flex;align-items:center;gap:3px;margin-top:4px;font-size:11px;color:#d97706;font-weight:700}
+.anime-card .card-score svg{width:12px;height:12px;fill:currentColor}
+@media(min-width:480px){.anime-card{width:170px}}
+
+/* Grid card variant */
+.anime-card-grid{cursor:pointer;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.anime-card-grid .poster-wrap{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:2/3;background:linear-gradient(135deg,var(--bg3),#dbeafe);box-shadow:var(--card-shadow);transition:all .35s cubic-bezier(.4,0,.2,1);border:1px solid rgba(14,165,233,0.08)}
+.anime-card-grid .poster-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.75) 0%,rgba(15,23,42,0.2) 30%,transparent 60%);opacity:0;transition:opacity .35s ease;pointer-events:none;border-radius:var(--radius)}
+.anime-card-grid:hover .poster-wrap{transform:translateY(-6px);box-shadow:var(--card-shadow-hover),0 0 20px rgba(14,165,233,0.12);border-color:rgba(14,165,233,0.25)}
+.anime-card-grid:hover .poster-wrap::after{opacity:1}
+.anime-card-grid .poster-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.anime-card-grid:hover .poster-wrap img{transform:scale(1.08)}
+.anime-card-grid .card-title-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;z-index:3;opacity:0;transform:translateY(8px);transition:all .35s ease;pointer-events:none}
+.anime-card-grid:hover .card-title-overlay{opacity:1;transform:translateY(0)}
+.anime-card-grid .card-title-overlay-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;line-height:1.3;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.anime-card-grid .card-title{margin-top:10px;font-size:13px;font-weight:700;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text);font-family:'Outfit',sans-serif}
+.anime-card-grid .card-meta{font-size:11px;color:var(--text3);margin-top:4px;font-weight:500}
+.anime-card-grid .card-score{display:flex;align-items:center;gap:3px;margin-top:4px;font-size:11px;color:#d97706;font-weight:700}
+.anime-card-grid .card-score svg{width:12px;height:12px;fill:currentColor}
+
+/* Horizontal scroll section */
+.h-scroll{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding-bottom:12px;margin:0 -16px;padding-left:16px;padding-right:16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.h-scroll::-webkit-scrollbar{display:none}
+.h-scroll>*{scroll-snap-align:start}
+
+/* Section header */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-header h2{font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.3px;color:var(--text)}
+.section-header .view-all{font-size:13px;font-weight:600;color:var(--primary);display:flex;align-items:center;gap:4px;transition:all .2s}
+.section-header .view-all:active{transform:scale(0.95)}
+
+/* Chip */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:24px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .2s;border:1px solid var(--glass-border);background:var(--bg2);color:var(--text2);cursor:pointer;user-select:none;backdrop-filter:blur(8px)}
+.chip.active{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border-color:transparent;box-shadow:0 4px 16px var(--primary-glow)}
+.chip:active{transform:scale(0.95)}
+
+/* Chips scroll */
+.chips-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;margin:0 -16px;padding-left:16px;padding-right:16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips-scroll::-webkit-scrollbar{display:none}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:12px;font-size:12px;font-weight:600;background:var(--bg3);color:var(--text2);border:1px solid var(--glass-border)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;transition:all .2s;white-space:nowrap;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;box-shadow:0 4px 16px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97);opacity:.9}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-ghost{background:var(--bg3);color:var(--text);border:1px solid var(--glass-border)}
+.btn-outline{border:1px solid var(--glass-border);color:var(--text);background:var(--bg2)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-lg{padding:14px 28px;font-size:15px}
+.btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+.btn-icon{width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm)}
+.btn-icon-sm{width:32px;height:32px}
+.btn svg{width:16px;height:16px}
+
+/* ============================================================
+   SEARCH & INPUTS
+   ============================================================ */
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:0 16px;height:48px;transition:all .2s;position:sticky;top:0;z-index:10;margin-bottom:12px;backdrop-filter:blur(12px)}
+.search-bar:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+.search-bar input{flex:1;height:100%;font-size:15px;background:transparent;color:var(--text)}
+.search-bar .search-icon{color:var(--text3);flex-shrink:0}
+
+/* Input fields */
+.input-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.input-wrap label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+.input-field{width:100%;height:44px;padding:0 14px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);font-size:14px;transition:all .2s;color:var(--text)}
+.input-field:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
+
+/* Admin search dropdown */
+.admin-search-results{max-height:200px;overflow-y:auto;background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-top:4px;box-shadow:0 8px 24px rgba(14,165,233,0.1);z-index:20;position:relative}
+.admin-search-item{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;border-bottom:1px solid var(--glass-border);transition:background .2s;display:flex;align-items:center;gap:10px;color:var(--text)}
+.admin-search-item:hover{background:var(--bg3)}
+.admin-search-item img{width:32px;height:48px;object-fit:cover;border-radius:6px}
+.admin-search-item .asi-info{flex:1;min-width:0}
+.admin-search-item .asi-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.admin-search-item .asi-meta{font-size:11px;color:var(--text3);font-weight:500}
+
+/* ============================================================
+   ANIME DETAIL PAGE - PRO
+   ============================================================ */
+#anime-detail{position:fixed;inset:0;z-index:200;background:var(--bg);transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#anime-detail::-webkit-scrollbar{width:0}
+#anime-detail.open{transform:translateX(0)}
+.detail-banner{position:relative;height:260px;overflow:hidden}
+.detail-banner .banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(8px) brightness(0.5);transform:scale(1.1);transition:all .5s ease}
+.detail-banner .banner-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,var(--bg) 100%)}
+.detail-header{position:relative;display:flex;gap:16px;padding:0 16px;margin-top:-80px}
+.detail-poster{width:130px;height:195px;border-radius:var(--radius);overflow:hidden;flex-shrink:0;box-shadow:0 16px 48px rgba(0,0,0,0.15);border:2px solid rgba(255,255,255,0.5);transition:all .3s ease;position:relative;z-index:2}
+.detail-poster:hover{transform:perspective(1000px) rotateY(-5deg) rotateX(5deg) scale(1.02);box-shadow:0 20px 56px rgba(14,165,233,0.15)}
+.detail-poster img{width:100%;height:100%;object-fit:cover}
+.detail-title-wrap{flex:1;padding-top:80px}
+.detail-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;line-height:1.2;margin-bottom:8px;color:var(--text)}
+.detail-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.detail-actions{display:flex;gap:10px;padding:16px}
+.detail-actions .btn-watch{flex:1}
+.detail-actions .btn-heart{width:48px;height:48px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg2);border:1px solid var(--glass-border);color:var(--text2);transition:all .2s}
+.detail-actions .btn-heart.active{color:var(--danger);background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2)}
+.detail-actions .btn-heart:active{transform:scale(0.9)}
+
+/* Stats bar */
+.stats-bar{display:flex;gap:16px;padding:0 16px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.stats-bar::-webkit-scrollbar{display:none}
+.stat-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:60px;padding:8px 12px;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--glass-border)}
+.stat-value{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--glass-border);position:sticky;top:0;background:var(--bg);z-index:5;backdrop-filter:blur(12px)}
+.tab{flex:1;padding:14px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--text3);position:relative;transition:color .2s;cursor:pointer;white-space:nowrap}
+.tab.active{color:var(--primary)}
+.tab-indicator{position:absolute;bottom:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px 3px 0 0;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px var(--primary-glow)}
+
+/* Description */
+.description{font-size:14px;line-height:1.65;color:var(--text2)}
+.description.collapsed{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.read-more{font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;margin-top:4px;display:inline-block}
+
+/* ============================================================
+   COMMENTS SECTION (below tabs) - RICH FORMAT
+   ============================================================ */
+.comments-section{padding:16px 0;border-top:1px solid var(--glass-border);margin-top:8px}
+.comments-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.comments-header h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.comments-count{font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;font-weight:600}
+
+/* Comment composer */
+.comment-composer{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;margin-bottom:16px;transition:all .2s;box-shadow:var(--card-shadow)}
+.comment-composer:focus-within{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-glow)}
+.comment-composer-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.comment-composer-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex-shrink:0;overflow:hidden}
+.comment-composer-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-composer-name{font-weight:700;font-size:13px;color:var(--text)}
+.comment-composer-input{width:100%;min-height:60px;padding:10px 12px;background:var(--bg3);border:1px solid var(--glass-border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);resize:vertical;margin-bottom:8px;transition:all .2s}
+.comment-composer-input:focus{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-glow)}
+.comment-toolbar{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.comment-tool-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:var(--bg3);border:1px solid var(--glass-border);color:var(--text2);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.comment-tool-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.comment-tool-btn:active{transform:scale(0.92)}
+.comment-submit{display:flex;justify-content:flex-end}
+.comment-submit-btn{padding:8px 18px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:13px;font-weight:700;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all .2s}
+.comment-submit-btn:active{transform:scale(0.95)}
+
+/* Comment card */
+.comment-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;margin-bottom:12px;transition:all .2s;box-shadow:var(--card-shadow)}
+.comment-card:hover{border-color:rgba(14,165,233,0.25);box-shadow:var(--card-shadow-hover)}
+.comment-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.comment-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex-shrink:0;overflow:hidden}
+.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-meta{flex:1;min-width:0}
+.comment-author{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;color:var(--text)}
+.comment-author .admin-tag{font-size:9px;background:linear-gradient(135deg,var(--warning),#fbbf24);color:#0f172a;padding:1px 6px;border-radius:4px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
+.comment-time{font-size:11px;color:var(--text3);margin-top:1px}
+.comment-text{font-size:14px;line-height:1.6;color:var(--text);margin:8px 0;white-space:pre-wrap;word-break:break-word}
+.comment-text b{font-weight:700;color:var(--primary)}
+.comment-text i{font-style:italic;color:var(--text2)}
+.comment-text a{color:var(--primary);text-decoration:underline}
+.comment-text .mention{color:var(--accent);font-weight:600}
+.comment-actions-bar{display:flex;align-items:center;gap:16px;padding-top:10px;border-top:1px solid var(--glass-border)}
+.comment-action{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);font-weight:600;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .2s;border:none;background:none}
+.comment-action:hover{background:var(--bg3);color:var(--text)}
+.comment-action svg{width:16px;height:16px}
+.comment-action.liked{color:var(--danger)}
+.comment-action.liked svg{fill:var(--danger);stroke:var(--danger)}
+
+/* Admin actions on comments */
+.admin-comment-actions{display:flex;gap:6px;margin-left:auto}
+.admin-comment-actions .btn-icon{width:26px;height:26px;background:transparent;border:1px solid var(--glass-border);color:var(--text3);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.admin-comment-actions .btn-icon:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+
+/* Comment reply section */
+.comment-replies{margin-top:12px;padding-left:16px;border-left:2px solid var(--glass-border)}
+.comment-reply-item{display:flex;gap:10px;margin-bottom:10px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)}
+.comment-reply-avatar{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text2);font-weight:700;font-size:11px;flex-shrink:0;overflow:hidden}
+.comment-reply-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-reply-content{flex:1;min-width:0}
+.comment-reply-author{font-weight:700;font-size:13px;color:var(--text)}
+.comment-reply-text{font-size:13px;color:var(--text2);margin-top:2px;line-height:1.5}
+.comment-reply-time{font-size:10px;color:var(--text3);margin-top:2px}
+.comment-reply-input-wrap{display:flex;gap:8px;margin-top:10px;align-items:center}
+.comment-reply-input{flex:1;height:36px;padding:0 14px;background:var(--bg3);border-radius:18px;font-size:13px;border:1px solid var(--glass-border);color:var(--text)}
+.comment-reply-input:focus{border-color:var(--primary)}
+.comment-reply-send{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;flex-shrink:0;transition:all .2s;border:none;cursor:pointer}
+.comment-reply-send:active{transform:scale(0.9)}
+
+/* ============================================================
+   PROFILE - PRO LEVEL
+   ============================================================ */
+.profile-hero{display:flex;flex-direction:column;align-items:center;padding:32px 16px;text-align:center;position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:-60px;left:0;right:0;height:220px;background:linear-gradient(180deg,rgba(14,165,233,0.08),transparent);pointer-events:none}
+.profile-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none}
+.profile-avatar-wrap{position:relative;z-index:1}
+.profile-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:38px;box-shadow:0 0 50px var(--primary-glow);overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,0.5);position:relative}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-status-dot{position:absolute;bottom:4px;right:4px;width:16px;height:16px;background:var(--success);border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 8px var(--success)}
+.profile-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;margin-top:14px;position:relative;z-index:1;color:var(--text)}
+.profile-handle{font-size:13px;color:var(--text3);margin-top:2px;position:relative;z-index:1}
+.profile-uid{font-family:monospace;font-size:11px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;margin-top:6px;position:relative;z-index:1;display:inline-block}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 16px}
+.stat-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px;text-align:center;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--card-shadow)}
+.stat-card:active{transform:scale(0.97)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0;transition:opacity .2s}
+.stat-card:hover::before{opacity:1}
+.stat-card .num{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-card .label{font-size:12px;color:var(--text3);margin-top:4px;font-weight:500}
+
+/* Watchlist */
+.watchlist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.watchlist-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--card-shadow)}
+.watchlist-card:active{transform:scale(0.97)}
+.watchlist-card .wl-poster{aspect-ratio:2/3;overflow:hidden;position:relative}
+.watchlist-card .wl-poster img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.watchlist-card:hover .wl-poster img{transform:scale(1.05)}
+.watchlist-card .wl-info{padding:12px}
+.watchlist-card .wl-title{font-size:13px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;font-family:'Outfit',sans-serif;color:var(--text)}
+.watchlist-card .wl-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:6px}
+.status-watching{background:rgba(34,197,94,0.12);color:#16a34a}
+.status-completed{background:rgba(14,165,233,0.12);color:#0284c7}
+.status-onhold{background:rgba(245,158,11,0.12);color:#d97706}
+.status-dropped{background:rgba(239,68,68,0.12);color:#dc2626}
+.status-plantowatch{background:rgba(99,102,241,0.12);color:#4f46e5}
+.wl-progress{height:5px;background:var(--bg3);border-radius:3px;margin-top:8px;overflow:hidden}
+.wl-progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .3s}
+
+/* ============================================================
+   SCHEDULE PAGE - TV GUIDE STYLE
+   ============================================================ */
+.schedule-note{background:linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.08));border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text2);line-height:1.5}
+.schedule-note svg{flex-shrink:0;margin-top:1px;color:var(--primary)}
+
+/* Day group */
+.schedule-day-group{margin-bottom:20px}
+.schedule-day-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:0 4px}
+.schedule-day-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.schedule-day-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text);text-transform:uppercase;letter-spacing:0.5px}
+.schedule-day-date{font-size:12px;color:var(--text3);margin-left:auto}
+
+/* Day colors */
+.day-sun{--day-color:#ef4444}.day-sun .schedule-day-dot{background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.4)}
+.day-mon{--day-color:#f59e0b}.day-mon .schedule-day-dot{background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,0.4)}
+.day-tue{--day-color:#ec4899}.day-tue .schedule-day-dot{background:#ec4899;box-shadow:0 0 8px rgba(236,72,153,0.4)}
+.day-wed{--day-color:#8b5cf6}.day-wed .schedule-day-dot{background:#8b5cf6;box-shadow:0 0 8px rgba(139,92,246,0.4)}
+.day-thu{--day-color:#0ea5e9}.day-thu .schedule-day-dot{background:#0ea5e9;box-shadow:0 0 8px rgba(14,165,233,0.4)}
+.day-fri{--day-color:#10b981}.day-fri .schedule-day-dot{background:#10b981;box-shadow:0 0 8px rgba(16,185,129,0.4)}
+.day-sat{--day-color:#6366f1}.day-sat .schedule-day-dot{background:#6366f1;box-shadow:0 0 8px rgba(99,102,241,0.4)}
+
+/* Schedule item - TV guide style */
+.schedule-item{display:flex;gap:12px;background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px;transition:all .2s;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--card-shadow);margin-bottom:10px;border-left:4px solid var(--day-color)}
+.schedule-item:active{transform:scale(0.98)}
+.schedule-item:hover{border-color:rgba(14,165,233,0.25);box-shadow:var(--card-shadow-hover)}
+.schedule-poster{width:60px;height:85px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;background:var(--bg3);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.schedule-poster img{width:100%;height:100%;object-fit:cover}
+.schedule-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.schedule-title{font-size:14px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
+.schedule-meta{font-size:11px;color:var(--text3);margin-bottom:2px}
+.schedule-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.schedule-time-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));padding:4px 10px;border-radius:20px;box-shadow:0 2px 8px var(--primary-glow)}
+.schedule-ep-badge{font-size:10px;font-weight:700;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:12px;border:1px solid var(--glass-border)}
+.schedule-notify-btn{font-size:11px;font-weight:600;color:var(--primary);background:rgba(14,165,233,0.08);padding:4px 12px;border-radius:20px;border:1px solid rgba(14,165,233,0.15);cursor:pointer;transition:all .2s;margin-left:auto}
+.schedule-notify-btn:hover{background:rgba(14,165,233,0.15)}
+.schedule-notify-btn:active{transform:scale(0.95)}
+
+/* ============================================================
+   ADMIN PANEL
+   ============================================================ */
+#admin-panel{position:fixed;inset:0;z-index:300;background:var(--bg);transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#admin-panel::-webkit-scrollbar{width:0}
+#admin-panel.open{transform:translateX(0)}
+.admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px}
+.admin-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--card-shadow)}
+.admin-card:active{transform:scale(0.97)}
+.admin-card svg{width:28px;height:28px;color:var(--primary);margin-bottom:8px}
+.admin-card .admin-label{font-size:13px;font-weight:700;color:var(--text)}
+
+/* Admin tables */
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;color:var(--text)}
+.admin-table th{text-align:left;padding:10px 12px;background:var(--bg3);font-weight:700;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0}
+.admin-table td{padding:10px 12px;border-bottom:1px solid var(--glass-border);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table .cell-actions{display:flex;gap:6px}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(15,23,42,0.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:all .3s ease}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal-content{background:var(--card);border-radius:var(--radius-lg);width:100%;max-width:420px;max-height:85vh;overflow-y:auto;transform:scale(0.9);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 24px 64px rgba(14,165,233,0.12);border:1px solid var(--glass-border)}
+.modal-overlay.open .modal-content{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--glass-border)}
+.modal-header h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
+.modal-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;color:var(--text2);cursor:pointer}
+.modal-close:active{background:var(--bg3)}
+.modal-body{padding:20px;color:var(--text);line-height:1.6}
+.modal-footer{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--glass-border)}
+.modal-footer .btn{flex:1}
+
+/* ============================================================
+   TOASTS
+   ============================================================ */
+#toast-container{position:fixed;bottom:calc(var(--nav-h) + 16px);left:0;right:0;z-index:500;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 16px}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,0.15);animation:toastIn .35s ease;pointer-events:auto;max-width:100%}
+.toast.toast-out{animation:toastOut .3s ease forwards}
+.toast-success{background:var(--success);color:#fff}
+.toast-error{background:var(--danger)}
+.toast-info{background:var(--primary)}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
+.empty-state svg{width:64px;height:64px;color:var(--text3);margin-bottom:12px;opacity:.5}
+.empty-state h3{font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;color:var(--text2);margin-bottom:4px}
+.empty-state p{font-size:13px;color:var(--text3)}
+
+/* ============================================================
+   SKELETON LOADING (Shimmer)
+   ============================================================ */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,rgba(14,165,233,0.1) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmerLoad 1.5s infinite;border-radius:var(--radius-sm)}
+.skeleton-poster{aspect-ratio:2/3;border-radius:var(--radius)}
+.skeleton-text{height:14px;border-radius:6px;margin-top:8px}
+.skeleton-text.short{width:60%}
+.skeleton-circle{width:40px;height:40px;border-radius:50%}
+.skeleton-banner{height:100%;width:100%;border-radius:0}
+.skeleton-card{height:100px;border-radius:var(--radius)}
+
+/* Tab loading skeleton */
+.tab-skeleton{display:flex;flex-direction:column;gap:12px;padding:16px}
+
+/* ============================================================
+   EPISODE LIST
+   ============================================================ */
+.episode-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);margin-bottom:8px;transition:all .2s;box-shadow:var(--card-shadow)}
+.episode-item:hover{background:var(--bg3)}
+.episode-num{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;color:var(--text2);flex-shrink:0}
+.episode-info{flex:1}
+.episode-title{font-size:13px;font-weight:600;color:var(--text)}
+.episode-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s}
+.episode-check.checked{background:var(--success);border-color:var(--success);color:#fff}
+
+/* ============================================================
+   CHARACTER / STAFF CARDS
+   ============================================================ */
+.char-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.char-card{display:flex;gap:10px;background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;transition:all .2s;box-shadow:var(--card-shadow)}
+.char-card:hover{border-color:rgba(14,165,233,0.25)}
+.char-card img{width:60px;height:80px;object-fit:cover;flex-shrink:0}
+.char-info{padding:10px 10px 10px 0;flex:1;min-width:0}
+.char-name{font-size:13px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
+.char-role{font-size:11px;color:var(--text3);margin-top:2px}
+.char-va{font-size:11px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ============================================================
+   GRID SYSTEMS
+   ============================================================ */
+.anime-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:480px){.anime-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:768px){.anime-grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1024px){.anime-grid{grid-template-columns:repeat(5,1fr)}}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .4s ease}
+
+/* ============================================================
+   HOME ENTER / REFRESH BUTTON
+   ============================================================ */
+.home-enter-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;min-height:50vh}
+.home-enter-wrap .he-logo{width:80px;height:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px var(--logo-red-glow));animation:float 3s ease-in-out infinite}
+.home-enter-wrap .he-logo svg{width:100%;height:100%}
+.home-enter-wrap h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;margin-bottom:8px;color:var(--text)}
+.home-enter-wrap p{font-size:14px;color:var(--text2);margin-bottom:24px;max-width:280px;line-height:1.5}
+.home-enter-btn{padding:10px 24px;background:var(--bg3);color:var(--text);font-family:'Inter',sans-serif;font-weight:600;font-size:14px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);cursor:pointer;transition:all .2s}
+.home-enter-btn:active{transform:scale(0.96);background:var(--bg2)}
+
+/* Retry button */
+.retry-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
+.retry-wrap svg{width:48px;height:48px;color:var(--text3);margin-bottom:16px}
+.retry-wrap h3{font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px;color:var(--text)}
+.retry-wrap p{font-size:13px;color:var(--text2);margin-bottom:20px;max-width:280px}
+
+/* ============================================================
+   PRIVACY & TERMS PROFESSIONAL CARDS
+   ============================================================ */
+.legal-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;margin-bottom:16px;transition:all .2s;box-shadow:var(--card-shadow)}
+.legal-card:hover{border-color:rgba(14,165,233,0.15)}
+.legal-card h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
+.legal-card h3 svg{color:var(--primary);width:20px;height:20px}
+.legal-card p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.legal-card ul{margin:8px 0 8px 18px;list-style:disc}
+.legal-card ul li{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:4px}
+.legal-card strong{color:var(--text)}
+.legal-section-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:var(--text);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--glass-border)}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.hidden{display:none!important}
+.text-center{text-align:center}
+.flex{display:flex}
+.flex-col{display:flex;flex-direction:column}
+.items-center{align-items:center}
+.justify-between{justify-content:space-between}
+.gap-4{gap:4px}
+.gap-8{gap:8px}
+.gap-12{gap:12px}
+.mb-8{margin-bottom:8px}
+.mb-12{margin-bottom:12px}
+.mb-16{margin-bottom:16px}
+.mt-8{margin-top:8px}
+.mt-12{margin-top:12px}
+.p-16{padding:16px}
+.w-full{width:100%}
+.rounded{border-radius:var(--radius)}
+.text-sm{font-size:13px}
+.text-xs{font-size:11px}
+.font-bold{font-weight:700}
+.text-primary{color:var(--primary)}
+.text-secondary{color:var(--text2)}
+.text-danger{color:var(--danger)}
+</style>
+<link rel="preconnect" href="https://graphql.anilist.co">
+<link rel="preconnect" href="https://study-ae01d-default-rtdb.firebaseio.com">
+<link rel="dns-prefetch" href="https://graphql.anilist.co">
+<link rel="dns-prefetch" href="https://study-ae01d-default-rtdb.firebaseio.com">
+<base target="_blank">
+</head>
+<body>
+
+<!-- ============================================================
+     SVG ICON DEFINITIONS
+     ============================================================ -->
+<svg style="display:none">
+  <defs>
+    <!-- IOX VAULT Logo Gradient -->
+    <linearGradient id="ioxSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8e8e8"/>
+      <stop offset="30%" style="stop-color:#c0c0c0"/>
+      <stop offset="50%" style="stop-color:#f0f0f0"/>
+      <stop offset="70%" style="stop-color:#a0a0a0"/>
+      <stop offset="100%" style="stop-color:#d0d0d0"/>
+    </linearGradient>
+    <linearGradient id="ioxRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626"/>
+      <stop offset="50%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#b91c1c"/>
+    </linearGradient>
+
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="21" x2="16.65" y2="16.65" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-star-o" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="6" x2="18" y2="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="12 19 5 12 12 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="4" y1="10" x2="4" y2="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="21" x2="12" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="8" x2="12" y2="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="20" y1="21" x2="20" y2="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="20" y1="12" x2="20" y2="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trending" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 6 23 6 23 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="12 6 12 12 16 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="2" x2="7" y2="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="17" y1="2" x2="17" y2="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="12" x2="22" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 2 12 7 7 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.5 4.5L6 9l4.5 1.5L12 15l1.5-4.5L18 9l-4.5-1.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m5 15-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m19 15-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="12" x2="22" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.67 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.67 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.67a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-more-h" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/><circle cx="5" cy="12" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 6 12 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="2" x2="12" y2="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 10 12 15 17 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="18" x2="21" y2="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="16" x2="12" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="8" x2="12.01" y2="8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="1 20 1 14 7 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-schedule" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bold" viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-italic" viewBox="0 0 24 24"><line x1="19" y1="4" x2="10" y2="4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="14" y1="20" x2="5" y2="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="4" x2="9" y2="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-at" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-loader" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"/></symbol>
+    <symbol id="i-link2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-related" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 6 12 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="2" x2="12" y2="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     PAGE TRANSITION OVERLAY
+     ============================================================ -->
+<div id="page-transition">
+  <div class="pt-logo">
+    <svg viewBox="0 0 200 140" class="iox-logo-svg">
+      <defs>
+        <linearGradient id="ptSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#e8e8e8"/>
+          <stop offset="50%" style="stop-color:#c0c0c0"/>
+          <stop offset="100%" style="stop-color:#f0f0f0"/>
+        </linearGradient>
+      </defs>
+      <text x="10" y="80" font-family="Outfit,sans-serif" font-weight="900" font-size="72" fill="url(#ptSilver)">I</text>
+      <circle cx="82" cy="62" r="28" fill="none" stroke="url(#ptSilver)" stroke-width="4"/>
+      <polygon points="78,50 96,62 78,74" fill="#dc2626"/>
+      <text x="108" y="80" font-family="Outfit,sans-serif" font-weight="900" font-size="72" fill="url(#ptSilver)">X</text>
+      <text x="30" y="120" font-family="Outfit,sans-serif" font-weight="700" font-size="28" fill="url(#ptSilver)" letter-spacing="8">VAULT</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ============================================================
+     LOADER / SPLASH SCREEN WITH IOX VAULT SVG LOGO
+     ============================================================ -->
+<div id="loader">
+  <div class="loader-svg-wrap">
+    <svg viewBox="0 0 200 140" class="iox-logo-svg">
+      <defs>
+        <linearGradient id="loaderSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#e8e8e8"/>
+          <stop offset="30%" style="stop-color:#c0c0c0"/>
+          <stop offset="50%" style="stop-color:#f0f0f0"/>
+          <stop offset="70%" style="stop-color:#a0a0a0"/>
+          <stop offset="100%" style="stop-color:#d0d0d0"/>
+        </linearGradient>
+      </defs>
+      <text x="10" y="80" font-family="Outfit,sans-serif" font-weight="900" font-size="72" fill="url(#loaderSilver)">I</text>
+      <circle cx="82" cy="62" r="28" fill="none" stroke="url(#loaderSilver)" stroke-width="4"/>
+      <polygon points="78,50 96,62 78,74" fill="#dc2626" filter="drop-shadow(0 0 4px rgba(220,38,38,0.6))"/>
+      <text x="108" y="80" font-family="Outfit,sans-serif" font-weight="900" font-size="72" fill="url(#loaderSilver)">X</text>
+      <text x="30" y="120" font-family="Outfit,sans-serif" font-weight="700" font-size="28" fill="url(#loaderSilver)" letter-spacing="8">VAULT</text>
+    </svg>
+    <div class="loader-svg-ring"></div>
+  </div>
+  <div class="loader-title" id="loader-title">IOX VAULT</div>
+  <div class="loader-sub" id="loader-sub">Your Anime Universe</div>
+  <div class="loader-version">v4.0 SKY</div>
+</div>
+
+<!-- ============================================================
+     SIDEBAR OVERLAY & SIDEBAR
+     ============================================================ -->
+<div id="sidebar-overlay"></div>
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-avatar" id="sidebar-avatar"></div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-name" id="sidebar-name">Guest</div>
+      <div class="sidebar-handle" id="sidebar-handle">@guest</div>
+      <div class="sidebar-uid" id="sidebar-uid">--</div>
+    </div>
+  </div>
+  <div class="sidebar-body">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Menu</div>
+      <div class="sidebar-item" id="sidebar-home">
+        <svg><use href="#i-home"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="sidebar-item" id="sidebar-search">
+        <svg><use href="#i-search"/></svg>
+        <span>Search</span>
+      </div>
+      <div class="sidebar-item" id="sidebar-schedule">
+        <svg><use href="#i-schedule"/></svg>
+        <span>Schedule</span>
+      </div>
+      <div class="sidebar-item" id="sidebar-profile">
+        <svg><use href="#i-user"/></svg>
+        <span>Profile</span>
+      </div>
+    </div>
+    <div class="sidebar-section" id="sidebar-admin-section" style="display:none">
+      <div class="sidebar-section-title">Admin</div>
+      <div class="sidebar-item" id="sidebar-admin">
+        <svg><use href="#i-shield"/></svg>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Legal</div>
+      <div class="sidebar-item" id="sidebar-terms">
+        <svg><use href="#i-info"/></svg>
+        <span>Terms of Use</span>
+      </div>
+      <div class="sidebar-item" id="sidebar-privacy">
+        <svg><use href="#i-shield"/></svg>
+        <span>Privacy Policy</span>
+      </div>
+      <div class="sidebar-item" id="sidebar-contact">
+        <svg><use href="#i-mail"/></svg>
+        <span>Contact Support</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-dev-card">
+        <h4>Developer</h4>
+        <p><strong>Mohammad Arshad</strong><br>Web Developer &amp; PCM Student<br>Lakhimpur Kheri, UP</p>
+        <p style="margin-top:6px">Tech: HTML, CSS, JS, Firebase</p>
+        <p style="margin-top:4px"><a href="https://github.com/darkeio6307" target="_blank">GitHub: darkeio6307</a></p>
+        <p style="margin-top:2px"><a href="mailto:moharshad687@gmail.com">moharshad687@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    IOX VAULT v4.0 SKY<br>Built with passion for anime
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div id="app" class="hidden">
+
+  <!-- Header -->
+  <header id="header" class="glass">
+    <div class="header-logo-wrap" id="header-logo-wrap">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 200 140" class="iox-logo-svg" style="width:28px;height:20px">
+          <text x="12" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">I</text>
+          <circle cx="88" cy="68" r="30" fill="none" stroke="url(#ioxSilver)" stroke-width="4"/>
+          <polygon points="82,54 102,68 82,82" fill="#dc2626"/>
+          <text x="116" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">X</text>
+        </svg>
+      </div>
+      <span class="header-title" id="header-title">IOX VAULT</span>
+      <span class="header-admin-badge hidden" id="admin-badge">ADMIN</span>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" id="header-search-btn" aria-label="Search">
+        <svg width="18" height="18"><use href="#i-search"/></svg>
+      </button>
+      <button class="header-btn" id="header-menu-btn" aria-label="Menu">
+        <svg width="18" height="18"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- ===================== HOME PAGE ===================== -->
+    <div class="page" id="page-home">
+      <div class="home-enter-wrap" id="home-enter-wrap">
+        <div class="he-logo">
+          <svg viewBox="0 0 200 140" class="iox-logo-svg">
+            <text x="12" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">I</text>
+            <circle cx="88" cy="68" r="30" fill="none" stroke="url(#ioxSilver)" stroke-width="4"/>
+            <polygon points="82,54 102,68 82,82" fill="#dc2626"/>
+            <text x="116" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">X</text>
+          </svg>
+        </div>
+        <h3>Welcome to IOX VAULT</h3>
+        <p>Discover trending anime, explore new releases, and manage your watchlist.</p>
+        <button class="home-enter-btn" id="home-enter-btn">Explore Now</button>
+      </div>
+
+      <div id="home-content" style="display:none">
+        <div class="chips-scroll mb-12">
+          <button class="chip active" data-filter="trending"><svg width="14" height="14"><use href="#i-trending"/></svg>Trending</button>
+          <button class="chip" data-filter="movies"><svg width="14" height="14"><use href="#i-film"/></svg>Movies</button>
+          <button class="chip" data-filter="tv"><svg width="14" height="14"><use href="#i-tv"/></svg>TV</button>
+          <button class="chip" data-filter="new"><svg width="14" height="14"><use href="#i-sparkles"/></svg>New</button>
+          <button class="chip" data-filter="top"><svg width="14" height="14"><use href="#i-star"/></svg>Top 100</button>
+          <button class="chip" data-filter="az"><svg width="14" height="14"><use href="#i-globe"/></svg>A-Z</button>
+        </div>
+
+        <div class="mb-16" id="available-now-section" style="display:none">
+          <div class="section-header">
+            <h2>Available Now</h2>
+            <span class="view-all" style="font-size:11px;color:var(--success);font-weight:700">&#9679; With Links</span>
+          </div>
+          <div class="h-scroll" id="available-scroll"></div>
+        </div>
+
+        <div class="mb-16">
+          <div class="section-header">
+            <h2>Trending Now</h2>
+            <button class="view-all" data-nav="search" data-filter="trending">View All</button>
+          </div>
+          <div class="h-scroll" id="trending-scroll"></div>
+        </div>
+
+        <div class="mb-16">
+          <div class="section-header">
+            <h2>Popular This Season</h2>
+          </div>
+          <div class="h-scroll" id="popular-scroll"></div>
+        </div>
+
+        <div class="mb-16">
+          <div class="section-header">
+            <h2>Top Rated</h2>
+          </div>
+          <div class="h-scroll" id="toprated-scroll"></div>
+        </div>
+
+        <div class="mb-16">
+          <div class="section-header">
+            <h2>Upcoming</h2>
+          </div>
+          <div class="h-scroll" id="upcoming-scroll"></div>
+        </div>
+      </div>
+
+      <div class="retry-wrap hidden" id="home-retry">
+        <svg><use href="#i-refresh"/></svg>
+        <h3>Failed to load</h3>
+        <p>Could not fetch anime data. Please check your connection and try again.</p>
+        <button class="btn btn-primary" id="home-retry-btn">
+          <svg width="16" height="16"><use href="#i-refresh"/></svg>
+          Retry
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================== SEARCH PAGE ===================== -->
+    <div class="page" id="page-search">
+      <div class="search-bar" id="search-bar">
+        <svg class="search-icon" width="20" height="20"><use href="#i-search"/></svg>
+        <input type="text" placeholder="Search anime... (e.g. Witch Hat Atelier)" id="search-input">
+        <div class="search-actions">
+          <button class="btn-icon btn-icon-sm hidden" id="search-clear" aria-label="Clear">
+            <svg width="16" height="16"><use href="#i-x"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="chips-scroll mb-12" id="filter-chips"></div>
+      <div class="anime-grid" id="search-results"></div>
+      <div class="text-center mt-12 mb-12 hidden" id="load-more-wrap">
+        <button class="btn btn-outline" id="load-more-btn">Load More</button>
+      </div>
+      <div class="empty-state hidden" id="search-empty">
+        <svg><use href="#i-search"/></svg>
+        <h3>No anime found</h3>
+        <p>Try different keywords or filters</p>
+      </div>
+    </div>
+
+    <!-- ===================== SCHEDULE PAGE ===================== -->
+    <div class="page" id="page-schedule">
+      <div class="section-header">
+        <h2>This Week's Schedule</h2>
+        <span class="view-all" id="schedule-date" style="font-size:11px;color:var(--text3)"></span>
+      </div>
+      <div class="schedule-note">
+        <svg width="16" height="16"><use href="#i-info"/></svg>
+        <span><strong>Note:</strong> Showing this week's schedule (Sun-Sat). These are Japanese Dub release times. Hindi, English, or other dubbed versions may release at different times.</span>
+      </div>
+      <div class="schedule-grid" id="schedule-list">
+        <div class="tab-skeleton">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+      </div>
+      <div class="empty-state hidden" id="schedule-empty">
+        <svg><use href="#i-calendar"/></svg>
+        <h3>No schedule data</h3>
+        <p>Could not fetch this week's airing schedule</p>
+      </div>
+    </div>
+
+    <!-- ===================== PROFILE PAGE ===================== -->
+    <div class="page" id="page-profile">
+      <div class="profile-hero">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profile-avatar"></div>
+          <div class="profile-status-dot" id="profile-status-dot" style="display:none"></div>
+        </div>
+        <div class="profile-name" id="profile-name">Guest</div>
+        <div class="profile-handle" id="profile-handle">@guest</div>
+        <div class="profile-uid" id="profile-uid">--</div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat-card">
+          <div class="num" id="stat-comments">0</div>
+          <div class="label">Comments</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-watchlist">0</div>
+          <div class="label">Watchlist</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-likes">0</div>
+          <div class="label">Likes Given</div>
+        </div>
+      </div>
+
+      <div class="p-16">
+        <div class="section-header mb-12">
+          <h2>My Watchlist</h2>
+        </div>
+        <div class="watchlist-grid" id="profile-watchlist"></div>
+        <div class="empty-state hidden" id="watchlist-empty">
+          <svg><use href="#i-bookmark"/></svg>
+          <h3>Your watchlist is empty</h3>
+          <p>Start adding anime you want to watch</p>
+        </div>
+      </div>
+
+      <div class="p-16">
+        <div class="section-header mb-12">
+          <h2>My Comments</h2>
+        </div>
+        <div id="profile-comments-list"></div>
+      </div>
+
+      <div class="p-16" style="padding-bottom:32px">
+        <button class="btn btn-ghost w-full" id="settings-btn">
+          <svg width="16" height="16"><use href="#i-settings"/></svg>
+          Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================== TERMS PAGE ===================== -->
+    <div class="page" id="page-terms">
+      <div class="section-header">
+        <h2>Terms of Use</h2>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-info"/></svg>Agreement to Terms</h3>
+        <p>By accessing or using <strong>IOX VAULT</strong>, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please discontinue use of the application immediately.</p>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-shield"/></svg>Use of Service</h3>
+        <p>IOX VAULT is an anime discovery and tracking platform. All anime data, including titles, descriptions, images, and metadata, is sourced from <strong>AniList</strong> and other public APIs. We do not host, store, or distribute any anime video content.</p>
+        <div class="legal-section-title">Prohibited Activities</div>
+        <ul>
+          <li>Using the service for any illegal purposes or to violate any laws</li>
+          <li>Attempting to gain unauthorized access to any part of the service</li>
+          <li>Interfering with or disrupting the service or servers</li>
+          <li>Harassing, abusing, or harming other users through comments or reviews</li>
+          <li>Uploading malicious content, spam, or inappropriate material</li>
+        </ul>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-user"/></svg>User Accounts</h3>
+        <p>IOX VAULT uses Telegram authentication for user login. You are responsible for maintaining the confidentiality of your account information. We reserve the right to suspend or terminate accounts that violate these terms or engage in prohibited activities.</p>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-zap"/></svg>Intellectual Property</h3>
+        <p>All anime-related content (titles, images, descriptions) belongs to their respective owners and licensors. IOX VAULT claims no ownership over third-party anime content. The IOX VAULT name, logo, and original software code are the property of the developer.</p>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-mail"/></svg>Contact &amp; Disputes</h3>
+        <p>For any questions regarding these Terms of Use, please contact us at <a href="mailto:moharshad687@gmail.com">moharshad687@gmail.com</a>. These terms are governed by the laws of India.</p>
+        <p style="margin-top:10px;font-size:12px;color:var(--text3)">Last Updated: June 28, 2026</p>
+      </div>
+    </div>
+
+    <!-- ===================== PRIVACY PAGE ===================== -->
+    <div class="page" id="page-privacy">
+      <div class="section-header">
+        <h2>Privacy Policy</h2>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-shield"/></svg>Introduction</h3>
+        <p>At <strong>IOX VAULT</strong>, we take your privacy seriously. This Privacy Policy explains what information we collect, how we use it, and your rights regarding your data. By using our service, you consent to the practices described in this policy.</p>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-user"/></svg>Information We Collect</h3>
+        <div class="legal-section-title">From Telegram Login</div>
+        <ul>
+          <li>Telegram User ID (unique identifier)</li>
+          <li>First name and last name (as set in Telegram)</li>
+          <li>Telegram username (if available)</li>
+          <li>Profile photo URL (if publicly available)</li>
+        </ul>
+        <div class="legal-section-title">User-Generated Content</div>
+        <ul>
+          <li>Comments posted on anime pages</li>
+          <li>Watchlist entries and watch progress</li>
+          <li>Like interactions with comments</li>
+        </ul>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-settings"/></svg>How We Use Your Data</h3>
+        <ul>
+          <li>To provide and maintain the core functionality of IOX VAULT</li>
+          <li>To personalize your experience (watchlist, progress tracking)</li>
+          <li>To display your profile information to other users (comments, public profile)</li>
+          <li>To improve our service through analytics</li>
+          <li>To enforce our Terms of Use and prevent abuse</li>
+        </ul>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-globe"/></svg>Data Storage &amp; Security</h3>
+        <p>Your data is stored securely using <strong>Firebase</strong> (Google Cloud infrastructure). We implement industry-standard security measures to protect your personal information. However, no method of electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+        <p style="margin-top:8px"><strong>We do not sell, trade, or rent your personal information</strong> to third parties under any circumstances.</p>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-bookmark"/></svg>Your Rights</h3>
+        <ul>
+          <li><strong>Access:</strong> You can view all data associated with your account</li>
+          <li><strong>Correction:</strong> Update your profile information through Telegram</li>
+          <li><strong>Deletion:</strong> Clear app data or contact us to delete your account</li>
+          <li><strong>Opt-out:</strong> You can stop using the service at any time</li>
+        </ul>
+      </div>
+      <div class="legal-card">
+        <h3><svg><use href="#i-mail"/></svg>Contact Us</h3>
+        <p>If you have any questions about this Privacy Policy or your data, please contact:</p>
+        <p style="margin-top:6px"><strong>Email:</strong> <a href="mailto:moharshad687@gmail.com">moharshad687@gmail.com</a></p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/darkeio6307" target="_blank">darkeio6307</a></p>
+        <p style="margin-top:10px;font-size:12px;color:var(--text3)">Last Updated: June 28, 2026</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav id="bottom-nav" class="glass">
+    <button class="nav-item active" data-tab="home" aria-label="Home">
+      <svg><use href="#i-home"/></svg>
+      <span>Home</span>
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-item" data-tab="search" aria-label="Search">
+      <svg><use href="#i-search"/></svg>
+      <span>Search</span>
+      <div class="nav-indicator" style="opacity:0"></div>
+    </button>
+    <button class="nav-item" data-tab="schedule" aria-label="Schedule">
+      <svg><use href="#i-schedule"/></svg>
+      <span>Schedule</span>
+      <div class="nav-indicator" style="opacity:0"></div>
+    </button>
+    <button class="nav-item" data-tab="profile" aria-label="Profile">
+      <svg><use href="#i-user"/></svg>
+      <span>Profile</span>
+      <div class="nav-indicator" style="opacity:0"></div>
+    </button>
+  </nav>
+</div>
+
+<!-- ============================================================
+     ANIME DETAIL OVERLAY - Tabs: Overview, Watch, Characters, Staff, Related
+     Comments section moved below tab content
+     ============================================================ -->
+<div id="anime-detail">
+  <div class="glass" style="position:sticky;top:0;z-index:10;display:flex;align-items:center;padding:0 16px;height:var(--header-h);gap:12px">
+    <button class="header-back" id="detail-back" aria-label="Go back" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg2);border:1px solid var(--glass-border)">
+      <svg width="20" height="20"><use href="#i-arrow-left"/></svg>
+    </button>
+    <span class="header-title" style="font-family:Outfit,sans-serif;font-weight:800;font-size:18px">Anime Details</span>
+    <button class="header-back" style="margin-left:auto;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg2);border:1px solid var(--glass-border)" id="detail-share" aria-label="Share">
+      <svg width="18" height="18"><use href="#i-share"/></svg>
+    </button>
+  </div>
+
+  <div id="detail-content">
+    <div class="detail-banner" id="detail-banner">
+      <div class="skeleton skeleton-banner"></div>
+    </div>
+    <div class="detail-header" id="detail-header"></div>
+    <div class="detail-actions" id="detail-actions"></div>
+    <div class="stats-bar" id="detail-stats"></div>
+
+    <!-- Tabs: Overview, Watch, Characters, Staff, Related -->
+    <div class="tabs" id="detail-tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="watch">Watch</button>
+      <button class="tab" data-tab="characters">Characters</button>
+      <button class="tab" data-tab="staff">Staff</button>
+      <button class="tab" data-tab="related">Related</button>
+      <div class="tab-indicator" id="tab-indicator"></div>
+    </div>
+
+    <!-- Tab content -->
+    <div class="p-16" id="detail-tab-content"></div>
+
+    <!-- Comments Section - BELOW tab content -->
+    <div class="p-16" id="detail-comments-wrap">
+      <div id="detail-comments"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN PANEL
+     ============================================================ -->
+<div id="admin-panel">
+  <div class="glass" style="display:flex;align-items:center;padding:0 16px;height:var(--header-h);gap:12px">
+    <button class="header-back" id="admin-back" aria-label="Go back" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg2);border:1px solid var(--glass-border)">
+      <svg width="20" height="20"><use href="#i-arrow-left"/></svg>
+    </button>
+    <span class="header-title" style="font-family:Outfit,sans-serif;font-weight:800;font-size:18px">Admin Panel</span>
+  </div>
+
+  <div id="admin-dashboard">
+    <div class="admin-grid">
+      <div class="admin-card" data-admin="channels">
+        <svg><use href="#i-tv"/></svg>
+        <div class="admin-label">Channels</div>
+      </div>
+      <div class="admin-card" data-admin="users">
+        <svg><use href="#i-user"/></svg>
+        <div class="admin-label">Users</div>
+      </div>
+      <div class="admin-card" data-admin="comments">
+        <svg><use href="#i-comment"/></svg>
+        <div class="admin-label">Comments</div>
+      </div>
+      <div class="admin-card" data-admin="feed">
+        <svg><use href="#i-message"/></svg>
+        <div class="admin-label">Feed</div>
+      </div>
+      <div class="admin-card" data-admin="settings">
+        <svg><use href="#i-settings"/></svg>
+        <div class="admin-label">Settings</div>
+      </div>
+      <div class="admin-card" data-admin="languages">
+        <svg><use href="#i-globe"/></svg>
+        <div class="admin-label">Languages</div>
+      </div>
+      <div class="admin-card" data-admin="analytics">
+        <svg><use href="#i-chart"/></svg>
+        <div class="admin-label">Analytics</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-section" class="hidden">
+    <div style="padding:16px">
+      <button class="btn btn-ghost btn-sm mb-12" id="admin-section-back">
+        <svg width="14" height="14"><use href="#i-arrow-left"/></svg>
+        Back
+      </button>
+      <div id="admin-section-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODALS CONTAINER
+     ============================================================ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-content" id="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-title">Modal</h3>
+      <button class="modal-close" id="modal-close" aria-label="Close modal">
+        <svg width="18" height="18"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer hidden" id="modal-footer">
+      <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div id="toast-container"></div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+
+// ============================================================
+//  FIREBASE CONFIG (SAME AS ORIGINAL)
+// ============================================================
+const firebaseConfig={
+  apiKey:"AIzaSyC-psUKqTO9u5kCuA3OUqWT63Ey0IvDei4",
+  authDomain:"study-ae01d.firebaseapp.com",
+  databaseURL:"https://study-ae01d-default-rtdb.firebaseio.com",
+  projectId:"study-ae01d",
+  storageBucket:"study-ae01d.firebasestorage.app",
+  messagingSenderId:"198271524977",
+  appId:"1:198271524977:web:b6c47ce187c6619c103bd0",
+  measurementId:"G-58F37JVFPJ"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+// ============================================================
+//  CONSTANTS & STATE
+// ============================================================
+const ADMIN_UID="8644584624";
+const ADMIN_PASSWORD="ioxvault2024";
+const ANILIST_URL="https://graphql.anilist.co";
+const FORMAT_FILTER=["TV","MOVIE","ONA","OVA","SPECIAL"];
+
+const state={
+  tab:'home',
+  prevTab:'',
+  isAdmin:false,
+  user:null,
+  watchlist:{},
+  comments:{},
+  animeCache:new Map(),
+  searchResults:[],
+  searchPage:1,
+  currentAnime:null,
+  detailTab:'overview',
+  adminTapCount:0,
+  adminTapTimer:null,
+  activeFilters:{genre:'',year:'',status:'',rating:'',sort:'POPULARITY_DESC'},
+  commentReplyOpen:{},
+  currentAdminSection:'',
+  feed:[],
+  users:{},
+  channels:{},
+  languages:{},
+  analytics:{users:0,comments:0,posts:0,active:0},
+  homeLoaded:false,
+  homeError:false,
+  homeLoading:false,
+  homeEntered:false,
+  scheduleData:[],
+  likedComments:{},
+  currentCommentListener:null,
+  currentWatchlistListener:null,
+  telegramReady:false
+};
+
+const tabs=['home','search','schedule','profile'];
+const GENRES=['Action','Adventure','Comedy','Drama','Fantasy','Horror','Mystery','Romance','Sci-Fi','Slice of Life','Sports','Supernatural','Thriller'];
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAY_CLASSES=['day-sun','day-mon','day-tue','day-wed','day-thu','day-fri','day-sat'];
+const DAY_COLORS=['#ef4444','#f59e0b','#ec4899','#8b5cf6','#0ea5e9','#10b981','#6366f1'];
+
+// ============================================================
+//  TELEGRAM WEBAPP - FIXED with robust user detection
+// ============================================================
+let tg=null;
+
+function initTelegram(){
+  try{
+    tg=window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#f0f9ff');
+    tg.setBackgroundColor('#f0f9ff');
+    state.telegramReady=true;
+    console.log('[TG] Telegram WebApp initialized');
+    return true;
+  }catch(e){
+    console.log('[TG] Telegram WebApp not available:',e.message);
+    return false;
+  }
+}
+
+function extractTelegramUser(){
+  if(!tg)return null;
+  
+  // Method 1: initDataUnsafe.user (most common)
+  try{
+    const user=tg.initDataUnsafe?.user;
+    if(user&&user.id){
+      console.log('[TG] User found via initDataUnsafe.user:',user.id);
+      return{
+        id:String(user.id),
+        firstName:user.first_name||'',
+        lastName:user.last_name||'',
+        username:user.username||'',
+        photoUrl:user.photo_url||''
+      };
+    }
+  }catch(e){console.log('[TG] initDataUnsafe.user failed:',e.message)}
+  
+  // Method 2: Parse initData string
+  try{
+    const initData=tg.initData;
+    if(initData){
+      const params=new URLSearchParams(initData);
+      const userJson=params.get('user');
+      if(userJson){
+        const user=JSON.parse(decodeURIComponent(userJson));
+        if(user&&user.id){
+          console.log('[TG] User found via initData parse:',user.id);
+          return{
+            id:String(user.id),
+            firstName:user.first_name||'',
+            lastName:user.last_name||'',
+            username:user.username||'',
+            photoUrl:user.photo_url||''
+          };
+        }
+      }
+    }
+  }catch(e){console.log('[TG] initData parse failed:',e.message)}
+  
+  // Method 3: Check if tg has user property directly
+  try{
+    if(tg.user&&tg.user.id){
+      console.log('[TG] User found via tg.user:',tg.user.id);
+      return{
+        id:String(tg.user.id),
+        firstName:tg.user.first_name||'',
+        lastName:tg.user.last_name||'',
+        username:tg.user.username||'',
+        photoUrl:tg.user.photo_url||''
+      };
+    }
+  }catch(e){console.log('[TG] tg.user failed:',e.message)}
+  
+  return null;
+}
+
+function loadTelegramUser(){
+  const user=extractTelegramUser();
+  if(user){
+    state.user=user;
+    try{localStorage.setItem('iox_user',JSON.stringify(state.user));}catch(e){}
+    if(state.user.id===ADMIN_UID)state.isAdmin=true;
+    console.log('[TG] Telegram user loaded:',state.user.id,state.user.firstName,state.user.lastName,state.user.username);
+    updateUserUI();
+    return true;
+  }
+  return false;
+}
+
+// Try to restore user from localStorage
+try{
+  const saved=localStorage.getItem('iox_user');
+  if(saved){
+    const parsed=JSON.parse(saved);
+    if(parsed&&parsed.id&&!parsed.id.startsWith('guest_')){
+      state.user=parsed;
+      if(state.user.id===ADMIN_UID)state.isAdmin=true;
+      console.log('[TG] User restored from localStorage:',state.user.id);
+    }
+  }
+}catch(e){console.log('[TG] localStorage restore failed:',e.message)}
+
+// Initialize Telegram
+initTelegram();
+loadTelegramUser();
+
+// If no user found, create guest (but keep trying)
+if(!state.user){
+  state.user={id:'guest_'+Date.now(),firstName:'Guest',lastName:'',username:'guest',photoUrl:''};
+}
+
+// Retry Telegram user detection after delays
+setTimeout(()=>{
+  if(state.user.id.startsWith('guest_')){
+    console.log('[TG] Retrying user detection...');
+    if(loadTelegramUser()){
+      showToast('Welcome, '+state.user.firstName+'!','success');
+      renderProfile();
+    }
+  }
+},1000);
+
+setTimeout(()=>{
+  if(state.user.id.startsWith('guest_')&&tg){
+    console.log('[TG] Final retry...');
+    loadTelegramUser();
+  }
+},3000);
+
+// ============================================================
+//  HELPER FUNCTIONS
+// ============================================================
+function $(s){return document.querySelector(s)}
+function $$(s){return document.querySelectorAll(s)}
+function escapeHtml(s){
+  if(s==null||s===undefined)return'';
+  const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;
+}
+function formatNum(n){if(!n)return'0';return n.toLocaleString()}
+function timeAgo(ts){
+  const d=Date.now()-ts;
+  const s=Math.floor(d/1000),m=Math.floor(s/60),h=Math.floor(m/60),day=Math.floor(h/24);
+  if(s<60)return'now';if(m<60)return m+'m';if(h<24)return h+'h';if(day<30)return day+'d';
+  return new Date(ts).toLocaleDateString();
+}
+function getTitle(a){return a?.title?.english||a?.title?.romaji||a?.title?.native||'Unknown'}
+function getPoster(a){return a?.coverImage?.large||a?.coverImage?.medium||''}
+function getBanner(a){return a?.bannerImage||getPoster(a)}
+function svgIcon(name,w,h,cls){return`<svg width="${w||16}" height="${h||16}" class="${cls||''}"><use href="#i-${name}"/></svg>`}
+function isGuest(){return state.user?.id?.startsWith('guest_')}
+
+// Update user UI across all elements
+function updateUserUI(){
+  if(!state.user)return;
+  const u=state.user;
+  const displayName=(u.firstName+' '+u.lastName).trim()||'Guest';
+  const handle='@'+(u.username||u.firstName?.toLowerCase()||'guest');
+  const uidStr='UID: '+(u.id||'--');
+  
+  const nameEl=$('#profile-name');if(nameEl)nameEl.textContent=displayName;
+  const sNameEl=$('#sidebar-name');if(sNameEl)sNameEl.textContent=displayName;
+  const handleEl=$('#profile-handle');if(handleEl)handleEl.textContent=handle;
+  const sHandleEl=$('#sidebar-handle');if(sHandleEl)sHandleEl.textContent=handle;
+  const uidEl=$('#profile-uid');if(uidEl)uidEl.textContent=uidStr;
+  const sUidEl=$('#sidebar-uid');if(sUidEl)sUidEl.textContent=uidStr;
+  
+  const setAvatar=(el,photo,name)=>{
+    if(!el)return;
+    if(photo){el.innerHTML=`<img src="${escapeHtml(photo)}" alt="">`}
+    else{el.textContent=(name||'G').charAt(0).toUpperCase()}
+  };
+  setAvatar($('#profile-avatar'),u.photoUrl,u.firstName);
+  setAvatar($('#sidebar-avatar'),u.photoUrl,u.firstName);
+  
+  const statusDot=$('#profile-status-dot');
+  if(statusDot)statusDot.style.display=isGuest()?'none':'block';
+  
+  $('#admin-badge')?.classList.toggle('hidden',!state.isAdmin);
+  const adminSec=$('#sidebar-admin-section');
+  if(adminSec)adminSec.style.display=state.isAdmin?'block':'none';
+}
+
+// ============================================================
+//  PAGE TRANSITION
+// ============================================================
+function showPageTransition(){
+  const pt=$('#page-transition');
+  if(!pt)return;
+  pt.classList.add('active');
+  setTimeout(()=>{pt.classList.remove('active');},500);
+}
+
+// ============================================================
+//  SAFE CACHE KEY
+// ============================================================
+function hashKey(str){
+  let h=0;
+  for(let i=0;i<str.length;i++){
+    const c=str.charCodeAt(i);
+    h=((h<<5)-h)+c;h=h&h;
+  }
+  return 'k'+Math.abs(h);
+}
+
+// ============================================================
+//  ANILIST API with RETRY
+// ============================================================
+async function aniQuery(query,vars,maxRetries=3){
+  const key=hashKey(JSON.stringify({q:query,v:vars}));
+  if(state.animeCache.has(key))return state.animeCache.get(key);
+  const cacheKey='ani_'+key;
+  const cached=getCache(cacheKey);
+  if(cached){state.animeCache.set(key,cached);return cached}
+
+  let lastError=null;
+  for(let attempt=0;attempt<=maxRetries;attempt++){
+    try{
+      if(attempt>0){console.log('AniList retry',attempt+'/'+maxRetries);}
+      const r=await fetch(ANILIST_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({query,variables:vars})
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const j=await r.json();
+      if(j.errors)throw new Error(j.errors[0]?.message||'GraphQL error');
+      if(j.data){state.animeCache.set(key,j.data);setCache(cacheKey,j.data);return j.data}
+      return null;
+    }catch(e){
+      lastError=e;
+      if(attempt<maxRetries){
+        const delay=Math.min(1000*Math.pow(2,attempt),5000);
+        await new Promise(r=>setTimeout(r,delay));
+      }
+    }
+  }
+  console.error('AniList failed after',maxRetries+1,'attempts:',lastError);
+  showToast('Failed to load data. Retrying...','error');
+  throw lastError;
+}
+
+const Q_TRENDING=`query{Page(page:1,perPage:20){media(sort:TRENDING_DESC,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity format status episodes season seasonYear genres}}}`;
+const Q_POPULAR=`query($season:MediaSeason,$year:Int){Page(page:1,perPage:20){media(season:$season,seasonYear:$year,sort:POPULARITY_DESC,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity format status episodes season seasonYear genres}}}`;
+const Q_TOPRATED=`query{Page(page:1,perPage:20){media(sort:SCORE_DESC,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity format status episodes season seasonYear genres}}}`;
+const Q_UPCOMING=`query{Page(page:1,perPage:20){media(status:NOT_YET_RELEASED,sort:POPULARITY_DESC,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity format status episodes season seasonYear genres}}}`;
+const Q_SEARCH=`query($search:String,$genre:[String],$year:Int,$status:MediaStatus,$sort:[MediaSort],$page:Int,$averageScore_greater:Int){Page(page:$page,perPage:24){media(search:$search,genre_in:$genre,seasonYear:$year,status:$status,sort:$sort,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL],averageScore_greater:$averageScore_greater){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity format status episodes season seasonYear genres description studios{nodes{name}}}}}`;
+const Q_DETAIL=`query($id:Int){Media(id:$id,type:ANIME){id title{english romaji native}coverImage{large medium}bannerImage averageScore popularity favourites format status episodes duration season seasonYear genres tags{name}description startDate{year month day}endDate{year month day} studios{nodes{name}} source hashtag siteUrl relations{edges{relationType node{id title{english romaji}coverImage{large}format status averageScore}}}}}`;
+const Q_CHARACTERS=`query($id:Int){Media(id:$id,type:ANIME){characters(page:1,perPage:25){edges{role node{name{full}image{large}} voiceActors{languageV2 name{full} image{large}}}}}}`;
+const Q_STAFF=`query($id:Int){Media(id:$id,type:ANIME){staff(page:1,perPage:25){edges{role node{name{full}image{large}}}}}}`;
+const Q_ADMIN_SEARCH=`query($search:String){Page(page:1,perPage:10){media(search:$search,type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{medium}format seasonYear}}}`;
+const Q_SCHEDULE=`query($start:Int,$end:Int){Page(page:1,perPage:50){airingSchedules(airingAt_greater:$start,airingAt_lesser:$end,sort:TIME){id airingAt episode media{id title{english romaji native}coverImage{large medium}format status episodes}}}}`;
+
+// ============================================================
+//  CACHE HELPERS
+// ============================================================
+const CACHE_KEY='iox_cache_v4';
+const CACHE_TTL=1000*60*30;
+function getCache(key){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY+'_'+key);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    if(Date.now()-data.ts>CACHE_TTL){localStorage.removeItem(CACHE_KEY+'_'+key);return null}
+    return data.val;
+  }catch(e){return null}
+}
+function setCache(key,val){
+  try{localStorage.setItem(CACHE_KEY+'_'+key,JSON.stringify({ts:Date.now(),val:val}));}catch(e){}
+}
+function clearCache(){
+  try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith(CACHE_KEY))localStorage.removeItem(k);}}catch(e){}
+}
+
+// ============================================================
+//  SPLASH SCREEN
+// ============================================================
+function runLoader(){
+  const nm=$('#loader-title'),sub=$('#loader-sub');
+  setTimeout(()=>{nm.classList.add('visible');},300);
+  setTimeout(()=>{sub.classList.add('visible');},500);
+  setTimeout(()=>{
+    $('#loader').classList.add('hidden');
+    $('#app').classList.remove('hidden');
+    initApp();
+  },1800);
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg,type='info'){
+  const c=$('#toast-container');
+  const t=document.createElement('div');
+  t.className='toast toast-'+type;
+  const icons={success:svgIcon('check',16,16),error:svgIcon('x',16,16),info:svgIcon('bell',16,16)};
+  t.innerHTML=icons[type]+'<span>'+escapeHtml(msg)+'</span>';
+  c.appendChild(t);
+  setTimeout(()=>{t.classList.add('toast-out');setTimeout(()=>t.remove(),300)},2500);
+}
+
+// ============================================================
+//  MODALS
+// ============================================================
+function openModal(title,bodyHtml,showFooter,onConfirm){
+  $('#modal-title').textContent=title;
+  $('#modal-body').innerHTML=bodyHtml;
+  $('#modal-footer').classList.toggle('hidden',!showFooter);
+  $('#modal-overlay').classList.add('open');
+  if(onConfirm){
+    const btn=$('#modal-confirm');
+    btn.onclick=()=>{onConfirm();closeModal()};
+  }
+}
+function closeModal(){$('#modal-overlay').classList.remove('open')}
+$('#modal-close').addEventListener('click',closeModal);
+$('#modal-overlay').addEventListener('click',e=>{if(e.target===$('#modal-overlay'))closeModal()});
+$('#modal-cancel').addEventListener('click',closeModal);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+// ============================================================
+//  SIDEBAR
+// ============================================================
+function openSidebar(){
+  $('#sidebar-overlay').classList.add('open');
+  $('#sidebar').classList.add('open');
+}
+function closeSidebar(){
+  $('#sidebar-overlay').classList.remove('open');
+  $('#sidebar').classList.remove('open');
+}
+$('#header-menu-btn').addEventListener('click',openSidebar);
+$('#sidebar-overlay').addEventListener('click',closeSidebar);
+
+$('#sidebar-home').addEventListener('click',()=>{closeSidebar();switchTab('home');});
+$('#sidebar-search').addEventListener('click',()=>{closeSidebar();switchTab('search');});
+$('#sidebar-schedule').addEventListener('click',()=>{closeSidebar();switchTab('schedule');loadSchedule();});
+$('#sidebar-profile').addEventListener('click',()=>{closeSidebar();switchTab('profile');renderProfile();});
+$('#sidebar-admin').addEventListener('click',()=>{closeSidebar();openAdminPanel();});
+
+$('#sidebar-terms').addEventListener('click',()=>{
+  closeSidebar();
+  switchTab('terms');
+  $('#header-title').textContent='Terms of Use';
+});
+$('#sidebar-privacy').addEventListener('click',()=>{
+  closeSidebar();
+  switchTab('privacy');
+  $('#header-title').textContent='Privacy Policy';
+});
+$('#sidebar-contact').addEventListener('click',()=>{
+  closeSidebar();
+  openModal('Contact Support','<p style="line-height:1.6">Email: <a href="mailto:moharshad687@gmail.com">moharshad687@gmail.com</a><br><br>GitHub: <a href="https://github.com/darkeio6307" target="_blank">darkeio6307</a></p>',false);
+});
+
+// ============================================================
+//  NAVIGATION WITH PAGE TRANSITION
+// ============================================================
+function switchTab(tab){
+  if(tab===state.tab&&tab!=='search')return;
+  showPageTransition();
+  setTimeout(()=>{
+    state.prevTab=state.tab;
+    state.tab=tab;
+
+    $$('.nav-item').forEach(n=>{
+      n.classList.toggle('active',n.dataset.tab===tab);
+      const ind=n.querySelector('.nav-indicator');
+      if(ind)ind.style.opacity=n.dataset.tab===tab?'1':'0';
+    });
+
+    $$('.page').forEach(p=>p.classList.remove('active'));
+    const tp=$(`#page-${tab}`);
+    if(tp){
+      tp.classList.add('active');
+      tp.style.animation='none';
+      tp.offsetHeight;
+      tp.style.animation='';
+      tp.classList.add('anim-tab-load');
+      setTimeout(()=>tp.classList.remove('anim-tab-load'),350);
+    }
+
+    const titles={home:'IOX VAULT',search:'Search',schedule:'Schedule',profile:'Profile',terms:'Terms of Use',privacy:'Privacy Policy'};
+    $('#header-title').textContent=titles[tab]||'IOX VAULT';
+    $('#admin-badge').classList.toggle('hidden',!state.isAdmin);
+    $('#sidebar-admin-section').style.display=state.isAdmin?'block':'none';
+
+    if(tab==='schedule')loadSchedule();
+    if(tab==='profile')renderProfile();
+    if(tab==='search'){$('#search-input').focus()}
+
+    $('#main-content').scrollTop=0;
+  },250);
+}
+
+$$('.nav-item').forEach(n=>n.addEventListener('click',()=>switchTab(n.dataset.tab)));
+$('#header-search-btn').addEventListener('click',()=>switchTab('search'));
+
+// ============================================================
+//  PREMIUM ANIME CARD with gradient overlay
+// ============================================================
+function createAnimeCard(a,cls){
+  const title=escapeHtml(getTitle(a));
+  const poster=escapeHtml(getPoster(a));
+  const score=a.averageScore?Math.round(a.averageScore/10):null;
+  const c=cls||'anime-card';
+  const year=a.seasonYear||'';
+  const format=a.format||'';
+  const scoreHtml=score!==null?`<div class="card-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><use href="#i-star"/></svg>${score}</div>`:'';
+  return`<div class="${c} card-hover anim-card-pop" data-id="${a.id}">
+    <div class="poster-wrap">
+      ${poster?`<img src="${poster}" alt="${title}" loading="lazy" decoding="async">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px">No Image</div>'}
+      ${score!==null?`<div class="score-badge"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg>${score}</div>`:''}
+      ${format?`<div class="format-badge">${format}</div>`:''}
+      <div class="card-title-overlay"><div class="card-title-overlay-text">${title}</div></div>
+    </div>
+    <div class="card-title">${title}</div>
+    ${year?`<div class="card-meta">${year}</div>`:''}
+    ${scoreHtml}
+  </div>`;
+}
+
+function renderSkeletonScroll(id,n=8){
+  let h='';for(let i=0;i<n;i++)h+=`<div class="anime-card"><div class="poster-wrap skeleton skeleton-poster"></div><div class="skeleton skeleton-text"></div></div>`;
+  const el=$(id);if(el)el.innerHTML=h;
+}
+
+function renderSkeletonGrid(id,n=8){
+  let h='';for(let i=0;i<n;i++)h+=`<div class="anime-card-grid"><div class="poster-wrap skeleton skeleton-poster"></div><div class="skeleton skeleton-text"></div></div>`;
+  const el=$(id);if(el)el.innerHTML=h;
+}
+
+// ============================================================
+//  HOME PAGE
+// ============================================================
+$('#home-enter-btn').addEventListener('click',()=>{
+  showPageTransition();
+  setTimeout(()=>{
+    state.homeEntered=true;
+    $('#home-enter-wrap').style.display='none';
+    $('#home-content').style.display='block';
+    loadHome().then(()=>{
+      setTimeout(()=>loadAvailableAnime(),600);
+    }).catch(err=>console.error('Home load failed:',err));
+  },250);
+});
+
+$('#home-retry-btn').addEventListener('click',()=>loadHome(1));
+
+async function loadAvailableAnime(){
+  try{
+    const snap=await db.ref('animeChannels').once('value');
+    const channels=snap.val()||{};
+    const ids=Object.keys(channels).map(Number).filter(n=>!isNaN(n));
+    if(!ids.length){$('#available-now-section').style.display='none';return}
+
+    const fetchIds=ids.slice(0,20);
+    const query=`query{Page(perPage:20){media(id_in:[${fetchIds.join(',')}],type:ANIME,format_in:[TV,MOVIE,ONA,OVA,SPECIAL]){id title{english romaji native}coverImage{large}bannerImage averageScore popularity format status episodes season seasonYear genres}}}`;
+
+    const data=await aniQuery(query,{});
+    const media=data?.Page?.media||[];
+    if(media.length){
+      const sec=$('#available-now-section');
+      const scrollEl=$('#available-scroll');
+      if(sec)sec.style.display='block';
+      if(scrollEl){
+        scrollEl.innerHTML=media.map(a=>createAnimeCard(a)).join('');
+        scrollEl.querySelectorAll('.anime-card').forEach(c=>c.addEventListener('click',()=>openAnimeDetail(c.dataset.id)));
+      }
+    }else{$('#available-now-section').style.display='none'}
+  }catch(e){
+    console.error('Available anime error:',e);
+    const sec=$('#available-now-section');
+    if(sec)sec.style.display='none';
+  }
+}
+
+async function loadHome(attempt=1){
+  const maxRetries=5;
+  if(state.homeLoading){console.log('Home already loading, skipping');return}
+  if(state.homeLoaded&&attempt===1){console.log('Home already loaded, skipping');return}
+  state.homeLoading=true;
+  state.homeError=false;
+  $('#home-retry').classList.add('hidden');
+
+  renderSkeletonScroll('#trending-scroll');
+  renderSkeletonScroll('#popular-scroll');
+  renderSkeletonScroll('#toprated-scroll');
+  renderSkeletonScroll('#upcoming-scroll');
+
+  const now=new Date();
+  const season=['WINTER','SPRING','SUMMER','FALL'][Math.floor((now.getMonth())/3)];
+  let hasAnySuccess=false;
+
+  try{
+    try{
+      const t=await aniQuery(Q_TRENDING);
+      if(t?.Page?.media?.length){
+        $('#trending-scroll').innerHTML=t.Page.media.map(a=>createAnimeCard(a)).join('');
+        hasAnySuccess=true;
+      }else{$('#trending-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">No trending anime</p></div>'}
+    }catch(e){
+      console.error('Trending error:',e);
+      $('#trending-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">Failed to load trending</p><button class="btn btn-sm btn-outline mt-8" onclick="loadHome()">Retry</button></div>';
+    }
+
+    try{
+      const p=await aniQuery(Q_POPULAR,{season,year:now.getFullYear()});
+      if(p?.Page?.media?.length){
+        $('#popular-scroll').innerHTML=p.Page.media.map(a=>createAnimeCard(a)).join('');
+        hasAnySuccess=true;
+      }else{$('#popular-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">No popular anime</p></div>'}
+    }catch(e){
+      console.error('Popular error:',e);
+      $('#popular-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">Failed to load popular</p><button class="btn btn-sm btn-outline mt-8" onclick="loadHome()">Retry</button></div>';
+    }
+
+    try{
+      const tr=await aniQuery(Q_TOPRATED);
+      if(tr?.Page?.media?.length){
+        $('#toprated-scroll').innerHTML=tr.Page.media.map(a=>createAnimeCard(a)).join('');
+        hasAnySuccess=true;
+      }else{$('#toprated-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">No top rated anime</p></div>'}
+    }catch(e){
+      console.error('TopRated error:',e);
+      $('#toprated-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">Failed to load top rated</p><button class="btn btn-sm btn-outline mt-8" onclick="loadHome()">Retry</button></div>';
+    }
+
+    try{
+      const u=await aniQuery(Q_UPCOMING);
+      if(u?.Page?.media?.length){
+        $('#upcoming-scroll').innerHTML=u.Page.media.map(a=>createAnimeCard(a)).join('');
+        hasAnySuccess=true;
+      }else{$('#upcoming-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">No upcoming anime</p></div>'}
+    }catch(e){
+      console.error('Upcoming error:',e);
+      $('#upcoming-scroll').innerHTML='<div class="empty-state" style="padding:20px"><p class="text-sm text-secondary">Failed to load upcoming</p><button class="btn btn-sm btn-outline mt-8" onclick="loadHome()">Retry</button></div>';
+    }
+
+    $$('.anime-card').forEach(c=>c.addEventListener('click',()=>openAnimeDetail(c.dataset.id)));
+
+    if(!hasAnySuccess){
+      if(attempt<maxRetries){
+        console.log('Home retry',attempt+'/'+maxRetries);
+        state.homeLoading=false;
+        setTimeout(()=>loadHome(attempt+1),2000*attempt);
+        return;
+      }
+      state.homeError=true;
+      $('#home-retry').classList.remove('hidden');
+    }else{
+      state.homeLoaded=true;
+      if(attempt>1)showToast('Loaded successfully!','success');
+    }
+
+    state.homeLoading=false;
+  }catch(e){
+    console.error('Home load error:',e);
+    state.homeLoading=false;
+    if(attempt<maxRetries){
+      setTimeout(()=>loadHome(attempt+1),2000*attempt);
+      return;
+    }
+    state.homeError=true;
+    $('#home-retry').classList.remove('hidden');
+  }
+}
+
+$$('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    $$('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    const f=chip.dataset.filter;
+    state.activeFilters={genre:'',year:'',status:'',rating:'',sort:'POPULARITY_DESC'};
+    if(f==='movies'){state.activeFilters.sort='POPULARITY_DESC';}
+    else if(f==='tv'){state.activeFilters.sort='TRENDING_DESC';}
+    else if(f==='top'){state.activeFilters.sort='SCORE_DESC';}
+    else if(f==='new'){state.activeFilters.sort='START_DATE_DESC';}
+    else if(f==='az'){state.activeFilters.sort='TITLE_ENGLISH';}
+    else{state.activeFilters.sort='TRENDING_DESC';}
+    switchTab('search');
+    $('#search-input').value='';
+    state.searchPage=1;state.searchResults=[];
+    doSearch();
+  });
+});
+
+// ============================================================
+//  ANIME DETAIL - FIXED with Comments below tabs
+// ============================================================
+async function openAnimeDetail(id){
+  showPageTransition();
+  setTimeout(async ()=>{
+    const numId=parseInt(id);
+    if(isNaN(numId)){showToast('Invalid anime ID','error');return}
+    state.currentAnime=null;
+    state.detailTab='overview';
+    state.commentReplyOpen={};
+    
+    // Remove previous comment listener
+    if(state.currentCommentListener){
+      db.ref('comments/'+state.currentCommentListener).off('value');
+      state.currentCommentListener=null;
+    }
+    
+    $('#detail-banner').innerHTML='<div class="skeleton skeleton-banner"></div>';
+    $('#detail-header').innerHTML='';
+    $('#detail-actions').innerHTML='';
+    $('#detail-stats').innerHTML='';
+    $('#detail-tab-content').innerHTML='<div class="tab-skeleton"><div class="skeleton skeleton-text" style="height:80px"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>';
+    $('#detail-comments').innerHTML='';
+    
+    $$('#detail-tabs .tab').forEach(t=>t.classList.remove('active'));
+    $('#detail-tabs .tab[data-tab="overview"]').classList.add('active');
+    updateTabIndicator();
+
+    $('#anime-detail').classList.add('open');
+    if(tg){tg.BackButton.show();tg.BackButton.onClick(closeAnimeDetail)}
+
+    try{
+      const data=await aniQuery(Q_DETAIL,{id:numId});
+      if(!data?.Media){showToast('Failed to load anime','error');return}
+      const a=state.currentAnime=data.Media;
+
+      const banner=getBanner(a);
+      $('#detail-banner').innerHTML=`<img class="banner-img" src="${escapeHtml(banner)}" alt="" loading="lazy"><div class="banner-overlay"></div>`;
+
+      const title=escapeHtml(getTitle(a));
+      const poster=escapeHtml(getPoster(a));
+      $('#detail-header').innerHTML=`<div class="detail-poster"><img src="${poster}" alt="${title}" loading="lazy"></div>
+        <div class="detail-title-wrap">
+          <div class="detail-title">${title}</div>
+          <div class="detail-badges">
+            ${a.format?`<span class="status-badge">${a.format}</span>`:''}
+            ${a.seasonYear?`<span class="status-badge">${a.seasonYear}</span>`:''}
+            ${a.status?`<span class="status-badge status-${a.status}">${a.status.replace(/_/g,' ')}</span>`:''}
+          </div>
+        </div>`;
+
+      const chanSnap=await db.ref('animeChannels/'+numId).once('value');
+      const channel=chanSnap.val();
+      const inWL=state.watchlist[numId];
+      $('#detail-actions').innerHTML=`<button class="btn btn-primary btn-lg btn-watch" id="btn-watch" ${!channel?'disabled':''}>
+          <svg width="16" height="16"><use href="#i-play"/></svg>
+          ${channel?'Watch on Telegram':'Coming Soon'}
+        </button>
+        <button class="btn-heart ${inWL?'active':''}" id="btn-heart-detail" aria-label="Add to watchlist">
+          <svg width="20" height="20"><use href="#i-heart"/></svg>
+        </button>`;
+
+      if(channel){
+        $('#btn-watch').addEventListener('click',()=>{
+          if(tg)tg.HapticFeedback.impactOccurred('light');
+          const link=typeof channel==='string'?channel:channel.channelLink||'';
+          if(link)window.open(link,'_blank');
+        });
+      }
+      $('#btn-heart-detail').addEventListener('click',()=>toggleWatchlist(a));
+
+      const stats=[];
+      if(a.averageScore)stats.push({v:(a.averageScore/10).toFixed(1),l:'Score'});
+      if(a.popularity)stats.push({v:'#'+formatNum(a.popularity),l:'Popularity'});
+      if(a.favourites)stats.push({v:formatNum(a.favourites),l:'Favorites'});
+      if(a.episodes)stats.push({v:a.episodes,l:'Episodes'});
+      if(a.duration)stats.push({v:a.duration+'m',l:'Duration'});
+      if(a.studios?.nodes?.length)stats.push({v:a.studios.nodes[0].name,l:'Studio'});
+      $('#detail-stats').innerHTML=stats.map(s=>`<div class="stat-item"><span class="stat-value">${s.v}</span><span class="stat-label">${s.l}</span></div>`).join('');
+
+      renderDetailTab(a);
+      loadAndRenderComments(numId);
+    }catch(e){
+      console.error('Detail error:',e);
+      showToast('Failed to load details','error');
+    }
+  },250);
+}
+
+function closeAnimeDetail(){
+  showPageTransition();
+  setTimeout(()=>{
+    $('#anime-detail').classList.remove('open');
+    state.currentAnime=null;
+    state.commentReplyOpen={};
+    if(state.currentCommentListener){
+      db.ref('comments/'+state.currentCommentListener).off('value');
+      state.currentCommentListener=null;
+    }
+    $('#detail-banner').innerHTML='<div class="skeleton skeleton-banner"></div>';
+    $('#detail-header').innerHTML='';
+    $('#detail-actions').innerHTML='';
+    $('#detail-stats').innerHTML='';
+    $('#detail-tab-content').innerHTML='';
+    $('#detail-comments').innerHTML='';
+    if(tg){tg.BackButton.hide()}
+  },250);
+}
+
+$('#detail-back').addEventListener('click',closeAnimeDetail);
+$('#detail-share').addEventListener('click',()=>{
+  if(!state.currentAnime)return;
+  const url=state.currentAnime.siteUrl||`https://anilist.co/anime/${state.currentAnime.id}`;
+  if(navigator.share){navigator.share({title:getTitle(state.currentAnime),url})}
+  else{navigator.clipboard.writeText(url);showToast('Link copied','success')}
+});
+
+$$('#detail-tabs .tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    $$('#detail-tabs .tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    state.detailTab=tab.dataset.tab;
+    renderDetailTab(state.currentAnime);
+    updateTabIndicator();
+  });
+});
+
+function updateTabIndicator(){
+  const ind=$('#tab-indicator');
+  const active=$('#detail-tabs .tab.active');
+  if(!active||!ind)return;
+  const rect=active.getBoundingClientRect();
+  const prect=active.parentElement.getBoundingClientRect();
+  ind.style.left=(rect.left-prect.left)+'px';
+  ind.style.width=rect.width+'px';
+}
+
+function renderDetailTab(a){
+  if(!a)return;
+  const c=$('#detail-tab-content');
+
+  if(state.detailTab==='overview'){
+    let desc=escapeHtml(a.description||'').replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'');
+    c.innerHTML=`<div class="description collapsed" id="desc-text">${desc}</div>
+      <span class="read-more" id="read-more">Read more</span>
+      ${a.genres?.length?`<div style="margin-top:14px"><div class="text-xs text-secondary mb-8">Genres</div><div style="display:flex;flex-wrap:wrap;gap:8px;max-width:100%;overflow:hidden">${a.genres.map(g=>`<span class="chip" style="margin-bottom:4px">${escapeHtml(g)}</span>`).join('')}</div></div>`:''}
+      ${a.tags?.length?`<div style="margin-top:14px"><div class="text-xs text-secondary mb-8">Tags</div><div style="display:flex;flex-wrap:wrap;gap:8px;max-width:100%;overflow:hidden">${a.tags.slice(0,15).map(t=>`<span class="pill" style="margin-bottom:4px">${escapeHtml(t.name)}</span>`).join('')}</div></div>`:''}
+      <div style="margin-top:16px"><div class="text-xs text-secondary mb-8">Available Languages</div><div class="flex flex-wrap gap-4" id="anime-langs"><span class="pill">Loading...</span></div></div>`;
+
+    $('#read-more').addEventListener('click',()=>{$('#desc-text').classList.toggle('collapsed');$('#read-more').textContent=$('#desc-text').classList.contains('collapsed')?'Read more':'Show less'});
+
+    db.ref('animeLanguages/'+a.id).once('value').then(snap=>{
+      const langs=snap.val();
+      if(langs&&langs.length){$('#anime-langs').innerHTML=langs.map(l=>`<span class="pill">${escapeHtml(l)}</span>`).join('')}
+      else{$('#anime-langs').innerHTML='<span class="text-sm text-secondary">No language info yet</span>'}
+    });
+  }
+
+  else if(state.detailTab==='watch'){
+    const ep=a.episodes||0;
+    if(ep>0){
+      const wl=state.watchlist[a.id];
+      const prog=(wl?.progress)||0;
+      let h=`<div style="margin-bottom:12px"><div class="text-xs text-secondary mb-8">Progress ${prog}/${ep}</div><div class="progress-bar"><div class="progress-fill" style="width:${(prog/ep*100)}%"></div></div></div>`;
+      for(let i=1;i<=Math.min(ep,50);i++){
+        const watched=wl?.progress>=i;
+        h+=`<div class="episode-item"><div class="episode-num">${i}</div><div class="episode-info"><div class="episode-title">Episode ${i}</div></div><div class="episode-check ${watched?'checked':''}" data-ep="${i}">${watched?svgIcon('check',14,14):''}</div></div>`;
+      }
+      if(ep>50)h+=`<div class="text-center text-sm text-secondary mt-12">+ ${ep-50} more episodes</div>`;
+      c.innerHTML=h;
+      $$('.episode-check').forEach(ch=>ch.addEventListener('click',()=>markWatched(a.id,parseInt(ch.dataset.ep),ch)));
+    }else{c.innerHTML='<div class="empty-state"><svg><use href="#i-play"/></svg><h3>No episode data</h3></div>'}
+  }
+
+  else if(state.detailTab==='characters'){
+    c.innerHTML='<div class="tab-skeleton"><div class="skeleton skeleton-text" style="height:60px"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text"></div></div>';
+    aniQuery(Q_CHARACTERS,{id:a.id}).then(d=>{
+      const edges=d?.Media?.characters?.edges||[];
+      if(!edges.length){c.innerHTML='<div class="empty-state"><svg><use href="#i-user"/></svg><h3>No character data</h3></div>';return}
+      c.innerHTML=`<div class="char-grid">${edges.map(e=>{
+        const ch=e.node,va=e.voiceActors?.[0];
+        return`<div class="char-card"><img src="${ch?.image?.large||''}" alt="" loading="lazy"><div class="char-info"><div class="char-name">${escapeHtml(ch?.name?.full||'')}</div><div class="char-role">${e.role||''}</div>${va?`<div class="char-va">${escapeHtml(va.name?.full||'')} (${va.languageV2||''})</div>`:''}</div></div>`;
+      }).join('')}</div>`;
+    }).catch(()=>{c.innerHTML='<div class="empty-state"><h3>Error loading characters</h3></div>'});
+  }
+
+  else if(state.detailTab==='staff'){
+    c.innerHTML='<div class="tab-skeleton"><div class="skeleton skeleton-text" style="height:60px"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text"></div></div>';
+    aniQuery(Q_STAFF,{id:a.id}).then(d=>{
+      const edges=d?.Media?.staff?.edges||[];
+      if(!edges.length){c.innerHTML='<div class="empty-state"><svg><use href="#i-user"/></svg><h3>No staff data</h3></div>';return}
+      c.innerHTML=`<div class="char-grid">${edges.map(e=>`<div class="char-card"><img src="${e.node?.image?.large||''}" alt="" loading="lazy"><div class="char-info"><div class="char-name">${escapeHtml(e.node?.name?.full||'')}</div><div class="char-role">${e.role||''}</div></div></div>`).join('')}</div>`;
+    }).catch(()=>{c.innerHTML='<div class="empty-state"><h3>Error loading staff</h3></div>'});
+  }
+
+  else if(state.detailTab==='related'){
+    c.innerHTML='<div class="tab-skeleton"><div class="skeleton skeleton-text" style="height:60px"></div><div class="skeleton skeleton-text"></div></div>';
+    if(a.relations?.edges?.length){
+      const related=a.relations.edges.filter(e=>e.node&&['TV','MOVIE','ONA','OVA','SPECIAL'].includes(e.node.format));
+      if(related.length){
+        c.innerHTML=`<div class="h-scroll">${related.map(e=>createAnimeCard(e.node)).join('')}</div>`;
+        $$('#detail-tab-content .anime-card').forEach(c=>c.addEventListener('click',()=>openAnimeDetail(c.dataset.id)));
+      }else{c.innerHTML='<div class="empty-state"><svg><use href="#i-related"/></svg><h3>No related anime</h3></div>'}
+    }else{c.innerHTML='<div class="empty-state"><svg><use href="#i-related"/></svg><h3>No related anime</h3></div>'}
+  }
+}
+
+function markWatched(animeId,ep,el){
+  const uid=state.user?.id;if(!uid||isGuest())return;
+  const ref=db.ref('users/'+uid+'/watchlist/'+animeId);
+  ref.once('value').then(snap=>{
+    const cur=snap.val()||{};
+    const progress=Math.max(cur.progress||0,ep);
+    ref.update({progress,status:cur.status||'watching'});
+    state.watchlist[animeId]={...state.watchlist[animeId],progress};
+    el.classList.add('checked');el.innerHTML=svgIcon('check',14,14);
+    $$('.episode-check').forEach((c,i)=>{if(i<ep){c.classList.add('checked');c.innerHTML=svgIcon('check',14,14)}});
+    showToast('Progress saved','success');
+  });
+}
+
+// ============================================================
+//  COMMENTS SYSTEM - FIXED
+// ============================================================
+
+// Load comments from Firebase and set up real-time listener
+function loadAndRenderComments(animeId){
+  // Remove previous listener
+  if(state.currentCommentListener){
+    db.ref('comments/'+state.currentCommentListener).off('value');
+  }
+  state.currentCommentListener=animeId;
+  
+  const container=$('#detail-comments');
+  if(container){
+    container.innerHTML=`<div class="comments-section">
+      <div class="comments-header"><h3>Comments</h3><span class="comments-count" id="comments-count-${animeId}">Loading...</span></div>
+      <div class="tab-skeleton"><div class="skeleton skeleton-text" style="height:60px"></div><div class="skeleton skeleton-text"></div></div>
+    </div>`;
+  }
+  
+  db.ref('comments/'+animeId).on('value',snap=>{
+    const val=snap.val()||{};
+    const comments=state.comments[animeId]=Object.entries(val).map(([id,v])=>({id,...v})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    
+    // Always render comments when data changes (they're always visible below tabs)
+    if(state.currentAnime&&state.currentAnime.id==animeId){
+      renderCommentsSection(animeId,comments);
+    }
+    
+    // Update profile if on profile page
+    if(state.tab==='profile')renderProfile();
+  },err=>{
+    console.error('Comments error:',err);
+    state.comments[animeId]=[];
+    if(container){
+      container.innerHTML=`<div class="comments-section">
+        <div class="comments-header"><h3>Comments</h3></div>
+        <div class="empty-state"><p class="text-sm text-secondary">Failed to load comments</p></div>
+      </div>`;
+    }
+  });
+}
+
+function renderCommentsSection(animeId,comments){
+  comments=comments||state.comments[animeId]||[];
+  const c=$('#detail-comments');
+  if(!c)return;
+  
+  let h=`<div class="comments-section">
+    <div class="comments-header">
+      <h3>Comments</h3>
+      <span class="comments-count">${comments.length}</span>
+    </div>`;
+  
+  // Composer
+  if(!isGuest()){
+    h+=`<div class="comment-composer">
+      <div class="comment-composer-header">
+        <div class="comment-composer-avatar">${state.user?.photoUrl?`<img src="${escapeHtml(state.user.photoUrl)}" alt="">`:(state.user?.firstName||'U').charAt(0).toUpperCase()}</div>
+        <div class="comment-composer-name">${escapeHtml((state.user?.firstName||'')+' '+(state.user?.lastName||'')).trim()||'User'}</div>
+      </div>
+      <textarea class="comment-composer-input" id="comment-input-${animeId}" placeholder="Share your thoughts about this anime... (use **bold**, *italic*)"></textarea>
+      <div class="comment-toolbar">
+        <button class="comment-tool-btn" onclick="insertFormat('comment-input-${animeId}','**','**')" title="Bold"><svg width="14" height="14"><use href="#i-bold"/></svg></button>
+        <button class="comment-tool-btn" onclick="insertFormat('comment-input-${animeId}','*','*')" title="Italic"><svg width="14" height="14"><use href="#i-italic"/></svg></button>
+      </div>
+      <div class="comment-submit">
+        <button class="comment-submit-btn" onclick="postComment(${animeId})">Post Comment</button>
+      </div>
+    </div>`;
+  }else{
+    h+=`<div class="comment-composer" style="text-align:center;padding:20px">
+      <p class="text-sm text-secondary">Login with Telegram to post comments</p>
+    </div>`;
+  }
+  
+  h+=`<div id="comments-list-${animeId}">`;
+  if(!comments.length){
+    h+=`<div class="empty-state"><svg><use href="#i-comment"/></svg><h3>No comments yet</h3><p>Be the first to share your thoughts</p></div>`;
+  }else{
+    comments.forEach(comment=>{
+      h+=createCommentCard(comment,animeId);
+    });
+  }
+  h+=`</div></div>`;
+  
+  c.innerHTML=h;
+  
+  // Attach event listeners
+  comments.forEach(comment=>{
+    const likeBtn=document.getElementById(`comment-like-${comment.id}`);
+    if(likeBtn)likeBtn.addEventListener('click',()=>toggleCommentLike(animeId,comment.id));
+    
+    const replyBtn=document.getElementById(`comment-reply-btn-${comment.id}`);
+    if(replyBtn)replyBtn.addEventListener('click',()=>toggleCommentReply(comment.id));
+    
+    const replySend=document.getElementById(`comment-reply-send-${comment.id}`);
+    if(replySend)replySend.addEventListener('click',()=>postCommentReply(animeId,comment.id));
+    
+    if(state.isAdmin){
+      const delBtn=document.getElementById(`comment-del-${comment.id}`);
+      if(delBtn)delBtn.addEventListener('click',()=>deleteComment(animeId,comment.id));
+    }
+  });
+}
+
+function createCommentCard(comment,animeId){
+  const likesCount=comment.likes?Object.keys(comment.likes).length:0;
+  const replies=comment.replies||[];
+  const uid=state.user?.id;
+  const liked=comment.likes&&comment.likes[uid];
+  const isAdm=state.isAdmin;
+  const name=escapeHtml(comment.authorName||'Anonymous');
+  const photo=comment.authorPhoto?`<img src="${escapeHtml(comment.authorPhoto)}" alt="">`:(comment.authorName?comment.authorName.charAt(0).toUpperCase():'A');
+  const formattedText=formatCommentText(escapeHtml(comment.text||''));
+  const isAdminComment=comment.authorId===ADMIN_UID;
+  
+  return`<div class="comment-card anim-comment-slide" id="comment-card-${comment.id}">
+    <div class="comment-card-header">
+      <div class="comment-avatar">${photo}</div>
+      <div class="comment-meta">
+        <div class="comment-author">${name}${isAdminComment?'<span class="admin-tag">ADMIN</span>':''}</div>
+        <div class="comment-time">${timeAgo(comment.timestamp)}</div>
+      </div>
+      ${isAdm?`<div class="admin-comment-actions">
+        <button class="btn-icon" id="comment-del-${comment.id}" title="Delete comment" aria-label="Delete comment">${svgIcon('trash',12,12)}</button>
+      </div>`:''}
+    </div>
+    <div class="comment-text">${formattedText}</div>
+    <div class="comment-actions-bar">
+      <button class="comment-action ${liked?'liked':''}" id="comment-like-${comment.id}">
+        <svg><use href="#i-heart"/></svg>
+        <span>${likesCount}</span>
+      </button>
+      <button class="comment-action" id="comment-reply-btn-${comment.id}">
+        <svg><use href="#i-message"/></svg>
+        <span>${replies.length}</span>
+      </button>
+    </div>
+    ${state.commentReplyOpen[comment.id]?`<div class="comment-replies">
+      ${replies.map(rep=>`<div class="comment-reply-item"><div class="comment-reply-avatar">${rep.authorPhoto?`<img src="${escapeHtml(rep.authorPhoto)}" alt="">`:(rep.authorName?rep.authorName.charAt(0).toUpperCase():'U')}</div><div class="comment-reply-content"><div class="comment-reply-author">${escapeHtml(rep.authorName||'')}</div><div class="comment-reply-text">${formatCommentText(escapeHtml(rep.text||''))}</div><div class="comment-reply-time">${timeAgo(rep.timestamp)}</div></div></div>`).join('')}
+      ${!isGuest()?`<div class="comment-reply-input-wrap"><input type="text" class="comment-reply-input" id="comment-reply-input-${comment.id}" placeholder="Write a reply..."><button class="comment-reply-send" id="comment-reply-send-${comment.id}">${svgIcon('send',14,14)}</button></div>`:''}
+    </div>`:''}
+  </div>`;
+}
+
+function formatCommentText(text){
+  text=text.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  text=text.replace(/\*(.+?)\*/g,'<i>$1</i>');
+  text=text.replace(/@(\w+)/g,'<span class="mention">@$1</span>');
+  text=text.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank">$1</a>');
+  return text;
+}
+
+function insertFormat(inputId,before,after){
+  const input=document.getElementById(inputId);
+  if(!input)return;
+  const start=input.selectionStart;
+  const end=input.selectionEnd;
+  const val=input.value;
+  const selected=val.substring(start,end);
+  input.value=val.substring(0,start)+before+selected+after+val.substring(end);
+  input.focus();
+  input.setSelectionRange(start+before.length,end+before.length);
+}
+
+function postComment(animeId){
+  const input=document.getElementById(`comment-input-${animeId}`);
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text){showToast('Write a comment first','error');return}
+  if(isGuest()){showToast('Login to post comments','info');return}
+  
+  const uid=state.user?.id;
+  const name=(state.user?.firstName||'User');
+  const fullName=name+(state.user?.lastName?' '+state.user.lastName:'');
+  
+  const ref=db.ref('comments/'+animeId).push();
+  ref.set({
+    text,
+    authorId:uid,
+    authorName:fullName,
+    authorPhoto:state.user?.photoUrl||'',
+    timestamp:Date.now(),
+    likes:{},
+    replies:[]
+  }).then(()=>{
+    input.value='';
+    showToast('Comment posted','success');
+  }).catch(err=>{
+    console.error('Post comment error:',err);
+    showToast('Failed: '+err.message,'error');
+  });
+}
+
+function toggleCommentLike(animeId,commentId){
+  const uid=state.user?.id;if(!uid||isGuest()){showToast('Login to like','info');return}
+  const ref=db.ref('comments/'+animeId+'/'+commentId+'/likes/'+uid);
+  ref.once('value').then(snap=>{
+    if(snap.exists())ref.remove();
+    else ref.set(true);
+  }).catch(err=>{
+    console.error('Like error:',err);
+    showToast('Failed to toggle like','error');
+  });
+}
+
+function toggleCommentReply(commentId){
+  state.commentReplyOpen[commentId]=!state.commentReplyOpen[commentId];
+  if(state.currentAnime){
+    const comments=state.comments[state.currentAnime.id]||[];
+    renderCommentsSection(state.currentAnime.id,comments);
+  }
+}
+
+function postCommentReply(animeId,commentId){
+  const input=document.getElementById(`comment-reply-input-${commentId}`);
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text)return;
+  if(isGuest())return;
+  
+  const uid=state.user?.id;
+  const name=(state.user?.firstName||'User');
+  const fullName=name+(state.user?.lastName?' '+state.user.lastName:'');
+  
+  // Use transaction to safely append reply
+  const ref=db.ref('comments/'+animeId+'/'+commentId+'/replies');
+  ref.transaction(currentReplies=>{
+    const replies=currentReplies||[];
+    replies.push({
+      authorId:uid,
+      authorName:fullName,
+      authorPhoto:state.user?.photoUrl||'',
+      text,
+      timestamp:Date.now()
+    });
+    return replies;
+  }).then(()=>{
+    input.value='';
+  }).catch(err=>{
+    console.error('Reply error:',err);
+    showToast('Failed to post reply','error');
+  });
+}
+
+function deleteComment(animeId,commentId){
+  if(!state.isAdmin&&!confirm('Delete this comment?'))return;
+  db.ref('comments/'+animeId+'/'+commentId).remove().then(()=>{
+    showToast('Comment deleted','info');
+    // Re-render will happen automatically via the Firebase listener
+  }).catch(err=>{
+    console.error('Delete comment error:',err);
+    showToast('Failed to delete','error');
+  });
+}
+
+// ============================================================
+//  WATCHLIST
+// ============================================================
+async function toggleWatchlist(a){
+  const uid=state.user?.id;if(!uid||isGuest()){showToast('Login to use watchlist','info');return}
+  const ref=db.ref('users/'+uid+'/watchlist/'+a.id);
+  const snap=await ref.once('value');
+  if(snap.exists()){
+    ref.remove();
+    delete state.watchlist[a.id];
+    showToast('Removed from watchlist','info');
+  }else{
+    const data={title:getTitle(a),poster:getPoster(a),status:'plan to watch',progress:0,addedAt:Date.now()};
+    ref.set(data);
+    state.watchlist[a.id]=data;
+    showToast('Added to watchlist','success');
+  }
+  const h=$('#btn-heart-detail');
+  if(h)h.classList.toggle('active',!!state.watchlist[a.id]);
+  if(state.tab==='profile')renderProfile();
+}
+
+function loadWatchlist(){
+  const uid=state.user?.id;if(!uid||isGuest())return;
+  if(state.currentWatchlistListener){
+    db.ref('users/'+state.currentWatchlistListener+'/watchlist').off('value');
+  }
+  state.currentWatchlistListener=uid;
+  db.ref('users/'+uid+'/watchlist').on('value',snap=>{
+    state.watchlist=snap.val()||{};
+    if(state.tab==='profile')renderProfile();
+  },err=>{console.error('Watchlist error:',err);state.watchlist={};});
+}
+
+// ============================================================
+//  SEARCH PAGE
+// ============================================================
+function renderFilterChips(){
+  const filters=[
+    {label:'Genre',key:'genre',options:['All',...GENRES]},
+    {label:'Year',key:'year',options:['All','2026','2025','2024','2023','2022','2021','2020','Older']},
+    {label:'Status',key:'status',options:['All','Airing','Completed','Upcoming','Cancelled']},
+    {label:'Rating',key:'rating',options:['All','9+','8+','7+','6+','5+']},
+    {label:'Sort',key:'sort',options:['Popularity','Score','Trending','Newest']}
+  ];
+  let h='';filters.forEach(f=>{h+=`<div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0"><span class="text-xs text-secondary">${f.label}</span><div style="display:flex;gap:6px">`;f.options.forEach(o=>{h+=`<button class="chip ${state.activeFilters[f.key]===o||(o==='All'&&!state.activeFilters[f.key])?'active':''}" data-filter="${f.key}" data-val="${o}">${o}</button>`});h+='</div></div>'});
+  $('#filter-chips').innerHTML=h;
+  $$('#filter-chips .chip').forEach(c=>c.addEventListener('click',()=>{
+    const k=c.dataset.filter,v=c.dataset.val;
+    state.activeFilters[k]=v==='All'?'':v;
+    state.searchPage=1;state.searchResults=[];doSearch();
+  }));
+}
+
+let searchDebounce;
+$('#search-input').addEventListener('input',e=>{
+  clearTimeout(searchDebounce);
+  const v=e.target.value;
+  $('#search-clear').classList.toggle('hidden',!v);
+  searchDebounce=setTimeout(()=>{state.searchPage=1;state.searchResults=[];doSearch()},300);
+});
+$('#search-clear').addEventListener('click',()=>{$('#search-input').value='';$('#search-clear').classList.add('hidden');state.searchPage=1;state.searchResults=[];doSearch()});
+
+async function doSearch(){
+  const q=$('#search-input').value.trim();
+  const f=state.activeFilters;
+  const vars={search:q||undefined,page:state.searchPage};
+  if(f.genre)vars.genre=[f.genre];
+  if(f.year){if(f.year==='Older'){vars.year=2019}else{vars.year=parseInt(f.year)}}
+  if(f.status){const map={'Airing':'RELEASING','Completed':'FINISHED','Upcoming':'NOT_YET_RELEASED','Cancelled':'CANCELLED'};vars.status=map[f.status]}
+  const sortMap={'Popularity':'POPULARITY_DESC','Score':'SCORE_DESC','Trending':'TRENDING_DESC','Newest':'START_DATE_DESC'};
+  vars.sort=[sortMap[f.sort]||'POPULARITY_DESC'];
+  if(f.rating)vars.averageScore_greater=parseInt(f.rating)*10;
+  if(!q&&!f.genre&&!f.year&&!f.status){vars.sort=['TRENDING_DESC']}
+
+  // Show skeleton
+  if(state.searchPage===1){
+    $('#search-results').innerHTML='';
+    for(let i=0;i<6;i++){$('#search-results').innerHTML+=`<div class="anime-card-grid"><div class="poster-wrap skeleton skeleton-poster"></div><div class="skeleton skeleton-text"></div></div>`}
+  }
+
+  try{
+    const data=await aniQuery(Q_SEARCH,vars);
+    const media=data?.Page?.media||[];
+    if(state.searchPage===1)state.searchResults=media;else state.searchResults.push(...media);
+
+    if(!state.searchResults.length){$('#search-results').innerHTML='';$('#search-empty').classList.remove('hidden');$('#load-more-wrap').classList.add('hidden')}
+    else{
+      $('#search-empty').classList.add('hidden');
+      $('#search-results').innerHTML=state.searchResults.map(a=>createAnimeCard(a,'anime-card-grid')).join('');
+      $$('.anime-card-grid').forEach(c=>c.addEventListener('click',()=>openAnimeDetail(c.dataset.id)));
+      $('#load-more-wrap').classList.toggle('hidden',media.length<24);
+    }
+    renderFilterChips();
+  }catch(e){
+    showToast('Search failed. Please retry.','error');
+  }
+}
+
+$('#load-more-btn').addEventListener('click',()=>{state.searchPage++;doSearch()});
+
+// ============================================================
+//  SCHEDULE PAGE - TV GUIDE STYLE with day grouping
+// ============================================================
+let scheduleLoaded=false;
+
+function getWeekRange(){
+  const now=new Date();
+  const day=now.getDay();
+  const diff=now.getDate()-day;
+  const startOfWeek=new Date(now.getFullYear(),now.getMonth(),diff,0,0,0);
+  const endOfWeek=new Date(now.getFullYear(),now.getMonth(),diff+6,23,59,59);
+  return{
+    start:Math.floor(startOfWeek.getTime()/1000),
+    end:Math.floor(endOfWeek.getTime()/1000)
+  };
+}
+
+function formatTime(timestamp){
+  const date=new Date(timestamp*1000);
+  return date.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+
+function getDayName(timestamp){
+  const date=new Date(timestamp*1000);
+  return {day:date.getDay(),name:DAY_NAMES[date.getDay()],dateStr:date.toLocaleDateString('en-US',{month:'short',day:'numeric'})};
+}
+
+async function loadSchedule(){
+  if(scheduleLoaded&&state.scheduleData.length>0)return;
+  
+  const now=new Date();
+  $('#schedule-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+  
+  // Show skeleton
+  $('#schedule-list').innerHTML=`<div class="tab-skeleton">
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>`;
+  $('#schedule-empty').classList.add('hidden');
+  
+  try{
+    const range=getWeekRange();
+    const data=await aniQuery(Q_SCHEDULE,range);
+    const schedule=data?.Page?.airingSchedules||[];
+    
+    const validSchedule=schedule.filter(s=>s.media&&s.media.id);
+    state.scheduleData=validSchedule;
+    scheduleLoaded=true;
+    
+    if(!validSchedule.length){
+      $('#schedule-list').innerHTML='';
+      $('#schedule-empty').classList.remove('hidden');
+      return;
+    }
+    
+    // Group by day
+    const grouped={};
+    for(let i=0;i<7;i++)grouped[i]=[];
+    validSchedule.forEach(s=>{
+      const dayInfo=getDayName(s.airingAt);
+      grouped[dayInfo.day].push({...s,dayInfo});
+    });
+    
+    // Render grouped schedule
+    let html='';
+    const today=new Date().getDay();
+    
+    for(let day=0;day<7;day++){
+      const items=grouped[day];
+      if(!items.length)continue;
+      
+      const isToday=day===today;
+      html+=`<div class="schedule-day-group ${DAY_CLASSES[day]}">
+        <div class="schedule-day-header">
+          <div class="schedule-day-dot"></div>
+          <span class="schedule-day-name">${DAY_NAMES[day]}${isToday?' <span style="color:var(--primary);font-size:12px">(Today)</span>':''}</span>
+          <span class="schedule-day-date">${items[0].dayInfo.dateStr} &middot; ${items.length} anime</span>
+        </div>`;
+      
+      items.forEach(s=>{
+        const a=s.media;
+        const title=escapeHtml(getTitle(a));
+        const poster=escapeHtml(getPoster(a));
+        const time=formatTime(s.airingAt);
+        const ep=s.episode||'?';
+        
+        html+=`<div class="schedule-item" data-id="${a.id}">
+          <div class="schedule-poster">${poster?`<img src="${poster}" alt="" loading="lazy">`:''}</div>
+          <div class="schedule-info">
+            <div class="schedule-title">${title}</div>
+            <div class="schedule-meta">${a.format||'TV'} ${a.episodes?`&middot; ${a.episodes} eps`:''}</div>
+            <div class="schedule-badges">
+              <span class="schedule-time-pill"><svg width="12" height="12"><use href="#i-clock"/></svg>${time}</span>
+              <span class="schedule-ep-badge">Ep ${ep}</span>
+              <button class="schedule-notify-btn" data-aid="${a.id}" data-title="${escapeHtml(title)}">
+                <svg width="12" height="12" style="display:inline;vertical-align:middle;margin-right:2px"><use href="#i-bell"/></svg>Notify
+              </button>
+            </div>
+          </div>
+        </div>`;
+      });
+      
+      html+=`</div>`;
+    }
+    
+    $('#schedule-list').innerHTML=html;
+    
+    $$('.schedule-item').forEach(c=>c.addEventListener('click',(e)=>{
+      if(e.target.closest('.schedule-notify-btn'))return;
+      openAnimeDetail(c.dataset.id);
+    }));
+    
+    $$('.schedule-notify-btn').forEach(btn=>{
+      btn.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        showToast('Notification feature coming soon!','info');
+      });
+    });
+    
+  }catch(e){
+    console.error('Schedule error:',e);
+    $('#schedule-list').innerHTML='';
+    $('#schedule-empty').classList.remove('hidden');
+  }
+}
+
+// ============================================================
+//  PROFILE PAGE - FIXED with Telegram user data
+// ============================================================
+function renderProfile(){
+  const u=state.user;if(!u){console.warn('No user');return}
+  
+  updateUserUI();
+  
+  // Stats
+  const wlKeys=Object.keys(state.watchlist);
+  $('#stat-watchlist').textContent=wlKeys.length;
+  
+  // Count comments by user
+  let userComments=0;
+  Object.values(state.comments).forEach(arr=>{
+    userComments+=arr.filter(c=>c.authorId===u?.id).length;
+  });
+  $('#stat-comments').textContent=userComments;
+  
+  // Count likes given
+  let likesGiven=0;
+  Object.values(state.comments).forEach(arr=>{
+    arr.forEach(c=>{
+      if(c.likes&&c.likes[u?.id])likesGiven++;
+    });
+  });
+  $('#stat-likes').textContent=likesGiven;
+
+  // Watchlist
+  const wl=$('#profile-watchlist');
+  if(!wlKeys.length){wl.innerHTML='';$('#watchlist-empty').classList.remove('hidden')}
+  else{
+    $('#watchlist-empty').classList.add('hidden');
+    wl.innerHTML=wlKeys.slice(0,20).map(id=>{
+      const item=state.watchlist[id];
+      const totalEp=item?.episodes||24;
+      return`<div class="watchlist-card" data-id="${id}">
+        <div class="wl-poster"><img src="${escapeHtml(item?.poster||'')}" alt="" loading="lazy"></div>
+        <div class="wl-info"><div class="wl-title">${escapeHtml(item?.title||'')}</div>
+        <span class="wl-status status-${(item?.status||'plan to watch').replace(/\s+/g,'')}">${item?.status||'Plan to Watch'}</span>
+        <div class="wl-progress"><div class="wl-progress-bar" style="width:${Math.min(((item?.progress||0)/totalEp)*100,100)}%"></div></div>
+        </div>
+      </div>`;
+    }).join('');
+    $$('.watchlist-card').forEach(c=>c.addEventListener('click',()=>openAnimeDetail(c.dataset.id)));
+  }
+
+  // My Comments
+  const myComments=[];
+  Object.entries(state.comments).forEach(([animeId,comments])=>{
+    comments.forEach(c=>{
+      if(c.authorId===u?.id)myComments.push({...c,animeId});
+    });
+  });
+  const pc=$('#profile-comments-list');
+  if(!myComments.length){pc.innerHTML='<div class="empty-state"><svg><use href="#i-comment"/></svg><h3>No comments yet</h3><p>Comments you post will appear here</p></div>'}
+  else{
+    pc.innerHTML=myComments.slice(0,20).map(c=>`<div class="comment-card"><div class="comment-text">${formatCommentText(escapeHtml(c.text||''))}</div><div class="comment-time">${timeAgo(c.timestamp)}</div></div>`).join('');
+  }
+}
+
+// ============================================================
+//  ADMIN PANEL
+// ============================================================
+$('#header-title').addEventListener('click',()=>{
+  if(state.isAdmin)return;
+  state.adminTapCount++;
+  if(state.adminTapTimer)clearTimeout(state.adminTapTimer);
+  state.adminTapTimer=setTimeout(()=>state.adminTapCount=0,2000);
+  if(state.adminTapCount>=5){
+    state.adminTapCount=0;
+    openModal('Admin Access','<input type="password" class="input-field" id="admin-pw-input" placeholder="Enter admin password">',true,()=>{
+      if($('#admin-pw-input').value===ADMIN_PASSWORD){
+        state.isAdmin=true;$('#admin-badge').classList.remove('hidden');
+        showToast('Admin access granted','success');openAdminPanel();
+      }else{showToast('Wrong password','error')}
+    });
+  }
+});
+
+function openAdminPanel(){
+  if(!state.isAdmin)return;
+  $('#admin-panel').classList.add('open');
+  loadAdminData();
+}
+
+$('#admin-badge').addEventListener('click',openAdminPanel);
+$('#admin-back').addEventListener('click',()=>{$('#admin-panel').classList.remove('open')});
+
+$$('.admin-card').forEach(c=>c.addEventListener('click',()=>showAdminSection(c.dataset.admin)));
+
+function showAdminSection(section){
+  state.currentAdminSection=section;
+  $('#admin-dashboard').classList.add('hidden');
+  $('#admin-section').classList.remove('hidden');
+  const sc=$('#admin-section-content');
+
+  if(section==='channels'){
+    sc.innerHTML=`<div class="flex items-center justify-between mb-12"><h3 style="font-family:Outfit,sans-serif;font-weight:800">Anime Channels</h3><button class="btn btn-primary btn-sm" id="add-channel-btn">${svgIcon('plus',14,14)} Add</button></div>
+      <div id="channels-list"></div>`;
+    loadChannelsList();
+    $('#add-channel-btn').addEventListener('click',showAddChannelModal);
+  }
+  else if(section==='users'){
+    sc.innerHTML=`<h3 style="font-family:Outfit,sans-serif;font-weight:800;margin-bottom:12px">Users</h3><div id="users-list"></div>`;
+    loadUsersList();
+  }
+  else if(section==='comments'){
+    sc.innerHTML=`<h3 style="font-family:Outfit,sans-serif;font-weight:800;margin-bottom:12px">Comments</h3><div id="admin-comments-list"></div>`;
+    loadAdminComments();
+  }
+  else if(section==='feed'){
+    sc.innerHTML=`<h3 style="font-family:Outfit,sans-serif;font-weight:800;margin-bottom:12px">Feed Posts</h3><div id="admin-feed-list"></div>`;
+    loadAdminFeed();
+  }
+  else if(section==='languages'){
+    sc.innerHTML=`<div class="flex items-center justify-between mb-12"><h3 style="font-family:Outfit,sans-serif;font-weight:800">Anime Languages</h3><button class="btn btn-primary btn-sm" id="add-lang-btn">${svgIcon('plus',14,14)} Add</button></div>
+      <div class="input-wrap mb-12"><label>Anime ID</label><input type="number" class="input-field" id="lang-anime-id" placeholder="AniList ID"></div>
+      <div class="input-wrap mb-12"><label>Languages (comma separated)</label><input type="text" class="input-field" id="lang-list" placeholder="Hindi, English, Tamil, Telugu"></div>
+      <button class="btn btn-primary mb-12" id="save-lang-btn">Save Languages</button>
+      <div id="languages-list"></div>`;
+    loadLanguagesList();
+    $('#save-lang-btn').addEventListener('click',saveLanguages);
+  }
+  else if(section==='settings'){
+    sc.innerHTML=`<h3 style="font-family:Outfit,sans-serif;font-weight:800;margin-bottom:12px">Settings</h3>
+      <div class="input-wrap mb-12"><label>Default Channel Link</label><input type="text" class="input-field" id="set-default-channel" placeholder="https://t.me/..."></div>
+      <div class="input-wrap mb-12"><label>Site Title</label><input type="text" class="input-field" id="set-site-title" placeholder="IOX VAULT"></div>
+      <div class="input-wrap mb-12"><label>Announcement</label><textarea class="input-field" id="set-announcement" placeholder="Announcement text..."></textarea></div>
+      <button class="btn btn-primary" id="save-settings-btn">Save Settings</button>`;
+    loadSettings();
+    $('#save-settings-btn').addEventListener('click',saveSettings);
+  }
+  else if(section==='analytics'){
+    sc.innerHTML=`<h3 style="font-family:Outfit,sans-serif;font-weight:800;margin-bottom:12px">Analytics</h3>
+      <div class="profile-stats">
+        <div class="stat-card"><div class="num" id="a-users">0</div><div class="label">Users</div></div>
+        <div class="stat-card"><div class="num" id="a-comments">0</div><div class="label">Comments</div></div>
+        <div class="stat-card"><div class="num" id="a-posts">0</div><div class="label">Posts</div></div>
+      </div>
+      <div style="margin-top:16px"><div class="stat-card"><div class="text-xs text-secondary">Active Today</div><div class="num" id="a-active" style="margin-top:4px">0</div></div></div>`;
+    updateAnalytics();
+  }
+}
+
+$('#admin-section-back').addEventListener('click',()=>{$('#admin-section').classList.add('hidden');$('#admin-dashboard').classList.remove('hidden')});
+
+function loadChannelsList(){
+  db.ref('animeChannels').once('value').then(snap=>{
+    const ch=snap.val()||{};
+    const c=$('#channels-list');
+    if(!Object.keys(ch).length){c.innerHTML='<p class="text-sm text-secondary">No channels added</p>';return}
+    c.innerHTML=`<table class="admin-table"><thead><tr><th>Anime ID</th><th>Link</th><th>Added By</th><th>Actions</th></tr></thead><tbody>
+      ${Object.entries(ch).map(([id,v])=>{
+        const link=typeof v==='string'?v:v?.channelLink||v?.link||'';
+        const addedBy=v?.addedBy||'-';const addedAt=v?.addedAt?new Date(v.addedAt).toLocaleDateString():'-';
+        return`<tr><td>${id}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><a href="${escapeHtml(link)}" target="_blank">${escapeHtml(link)}</a></td>
+        <td style="font-size:11px;color:var(--text3)">${addedBy}<br><span style="font-size:10px">${addedAt}</span></td>
+        <td class="cell-actions"><button class="btn btn-danger btn-sm admin-del-channel" data-id="${id}">${svgIcon('trash',12,12)}</button></td></tr>`;
+      }).join('')}</tbody></table>`;
+    $$('.admin-del-channel').forEach(b=>b.addEventListener('click',()=>{
+      if(!confirm('Delete this channel?'))return;
+      db.ref('animeChannels/'+b.dataset.id).remove().then(()=>{showToast('Channel deleted','info');loadChannelsList();});
+    }));
+  }).catch(err=>{console.error('Channels error:',err);$('#channels-list').innerHTML='<p class="text-sm text-danger">Error loading</p>'});
+}
+
+function showAddChannelModal(){
+  openModal('Add Channel',`
+    <div class="input-wrap mb-12"><label>Search Anime Name</label><input type="text" class="input-field" id="admin-anime-search" placeholder="Type anime name..."><div class="admin-search-results hidden" id="admin-search-results"></div></div>
+    <div class="input-wrap mb-12"><label>Anime ID(s) - comma separated</label><input type="text" class="input-field" id="ch-anime-id" placeholder="16498, 25777, 99147"></div>
+    <div class="input-wrap mb-12"><label>Channel Link</label><input type="text" class="input-field" id="ch-link" placeholder="https://t.me/..."></div>
+    <div class="flex items-center gap-8 mb-12"><input type="checkbox" id="ch-propagate" checked style="width:18px;height:18px;accent-color:var(--primary)"><label for="ch-propagate" style="font-size:13px;color:var(--text2);font-weight:600">Auto-link to all seasons in franchise</label></div>
+  `,true,()=>{
+    const idsStr=$('#ch-anime-id').value.trim();
+    const link=$('#ch-link').value.trim();
+    const propagate=$('#ch-propagate').checked;
+    if(!idsStr||!link){showToast('Please fill all fields','error');return}
+    const ids=idsStr.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0);
+    if(!ids.length){showToast('Invalid Anime ID(s)','error');return}
+    showToast('Saving channels...','info');
+    let savedCount=0;
+    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now()}).then(()=>{savedCount++}));
+    Promise.all(promises).then(()=>{
+      if(propagate&&ids.length===1){
+        propagateToFranchise(ids[0],link).then(count=>{
+          showToast(`Saved! Auto-linked to ${count} anime in franchise`,'success');
+          loadChannelsList();
+        }).catch(()=>{showToast('Saved! Franchise link failed','success');loadChannelsList();});
+      }else{
+        showToast(`Saved ${savedCount} channel(s)`,'success');
+        loadChannelsList();
+      }
+    }).catch(err=>{showToast('Failed: '+err.message,'error')});
+  });
+
+  setTimeout(()=>{
+    const searchInput=$('#admin-anime-search');
+    const resultsDiv=$('#admin-search-results');
+    let searchTimer;
+    searchInput.addEventListener('input',e=>{
+      clearTimeout(searchTimer);
+      const val=e.target.value.trim();
+      if(!val){resultsDiv.classList.add('hidden');return}
+      searchTimer=setTimeout(()=>{
+        aniQuery(Q_ADMIN_SEARCH,{search:val}).then(data=>{
+          const media=data?.Page?.media||[];
+          if(!media.length){resultsDiv.classList.add('hidden');return}
+          resultsDiv.innerHTML=media.map(a=>{
+            const poster=a.coverImage?.medium||'';
+            const title=getTitle(a);
+            const year=a.seasonYear||'?';
+            const format=a.format||'';
+            return`<div class="admin-search-item" data-id="${a.id}">${poster?`<img src="${poster}" alt="">`:''}<div class="asi-info"><div class="asi-title">${escapeHtml(title)}</div><div class="asi-meta">${year} &middot; ${format}</div></div></div>`;
+          }).join('');
+          resultsDiv.classList.remove('hidden');
+          $$('.admin-search-item').forEach(item=>item.addEventListener('click',()=>{
+            $('#ch-anime-id').value=item.dataset.id;
+            resultsDiv.classList.add('hidden');
+            searchInput.value='';
+          }));
+        }).catch(()=>resultsDiv.classList.add('hidden'));
+      },400);
+    });
+    searchInput.addEventListener('blur',()=>setTimeout(()=>resultsDiv.classList.add('hidden'),200));
+  },100);
+}
+
+async function propagateToFranchise(sourceId,link){
+  try{
+    const data=await aniQuery(Q_DETAIL,{id:sourceId});
+    const a=data?.Media;if(!a)return 0;
+    const edges=a.relations?.edges||[];
+    const relatedIds=[];
+    edges.forEach(e=>{
+      if(e.node&&['TV','MOVIE','ONA','OVA','SPECIAL'].includes(e.node.format)){
+        relatedIds.push(e.node.id);
+      }
+    });
+    if(!relatedIds.length)return 0;
+    const promises=relatedIds.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:'auto-franchise',addedAt:Date.now(),sourceId}));
+    await Promise.all(promises);
+    return relatedIds.length;
+  }catch(e){console.error('Propagate error:',e);return 0}
+}
+
+function loadUsersList(){
+  db.ref('users').once('value').then(snap=>{
+    const users=snap.val()||{};
+    const c=$('#users-list');
+    if(!Object.keys(users).length){c.innerHTML='<p class="text-sm text-secondary">No users</p>';return}
+    c.innerHTML=`<table class="admin-table"><thead><tr><th>UID</th><th>Name</th><th>Username</th><th>Actions</th></tr></thead><tbody>
+      ${Object.entries(users).map(([id,v])=>`<tr><td style="font-family:monospace;font-size:11px">${id}</td><td>${escapeHtml(v?.name||'')}</td><td>${escapeHtml(v?.username||'')}</td>
+      <td class="cell-actions"><button class="btn btn-danger btn-sm admin-ban-btn" data-uid="${id}" data-name="${escapeHtml(v?.name||'')}">${svgIcon('ban',12,12)} Ban</button></td></tr>`).join('')}</tbody></table>`;
+    $$('.admin-ban-btn').forEach(b=>b.addEventListener('click',()=>banUser(b.dataset.uid,b.dataset.name)));
+  });
+}
+
+function loadAdminComments(){
+  const c=$('#admin-comments-list');
+  let allComments=[];
+  Object.entries(state.comments).forEach(([animeId,comments])=>{
+    comments.forEach(com=>allComments.push({...com,animeId}));
+  });
+  allComments.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  
+  if(!allComments.length){c.innerHTML='<p class="text-sm text-secondary">No comments</p>';return}
+  c.innerHTML=`<table class="admin-table"><thead><tr><th>Anime</th><th>Author</th><th>Text</th><th>Actions</th></tr></thead><tbody>
+    ${allComments.slice(0,50).map(c=>`<tr><td style="font-size:11px">${c.animeId}</td><td>${escapeHtml(c.authorName||'')}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.text||'')}</td>
+    <td class="cell-actions"><button class="btn btn-danger btn-sm admin-del-comment" data-anime="${c.animeId}" data-id="${c.id}">${svgIcon('trash',12,12)}</button></td></tr>`).join('')}</tbody></table>`;
+  $$('.admin-del-comment').forEach(b=>b.addEventListener('click',()=>deleteComment(b.dataset.anime,b.dataset.id)));
+}
+
+function loadAdminFeed(){
+  db.ref('feed').once('value').then(snap=>{
+    const feed=snap.val()||{};state.feed=Object.entries(feed).map(([id,v])=>({id,...v})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    const c=$('#admin-feed-list');
+    if(!state.feed.length){c.innerHTML='<p class="text-sm text-secondary">No posts</p>';return}
+    c.innerHTML=`<table class="admin-table"><thead><tr><th>Title</th><th>Author</th><th>Actions</th></tr></thead><tbody>
+      ${state.feed.map(f=>`<tr><td>${escapeHtml(f.title||'')}</td><td>${escapeHtml(f.author||'')}</td>
+      <td class="cell-actions"><button class="btn btn-ghost btn-sm admin-pin-post" data-id="${f.id}">${svgIcon('bookmark',12,12)}</button><button class="btn btn-danger btn-sm admin-del-post" data-id="${f.id}">${svgIcon('trash',12,12)}</button></td></tr>`).join('')}</tbody></table>`;
+    $$('.admin-del-post').forEach(b=>b.addEventListener('click',()=>db.ref('feed/'+b.dataset.id).remove().then(()=>loadAdminFeed())));
+  });
+}
+
+function loadSettings(){
+  db.ref('adminSettings').once('value').then(snap=>{
+    const s=snap.val()||{};
+    $('#set-default-channel').value=s.defaultChannel||'';
+    $('#set-site-title').value=s.siteTitle||'';
+    $('#set-announcement').value=s.announcements||'';
+  });
+}
+function saveSettings(){
+  db.ref('adminSettings').set({
+    defaultChannel:$('#set-default-channel').value.trim(),
+    siteTitle:$('#set-site-title').value.trim(),
+    announcements:$('#set-announcement').value.trim()
+  }).then(()=>showToast('Settings saved','success'));
+}
+
+function updateAnalytics(){
+  db.ref('users').once('value').then(s=>{$('#a-users').textContent=Object.keys(s.val()||{}).length});
+  let totalComments=0;
+  Object.values(state.comments).forEach(arr=>{totalComments+=arr.length});
+  $('#a-comments').textContent=totalComments;
+  db.ref('feed').once('value').then(s=>{$('#a-posts').textContent=Object.keys(s.val()||{}).length});
+}
+
+function loadAdminData(){
+  db.ref('users').once('value').then(s=>{state.users=s.val()||{}});
+  db.ref('animeChannels').once('value').then(s=>{state.channels=s.val()||{}});
+  db.ref('animeLanguages').once('value').then(s=>{state.languages=s.val()||{}});
+}
+
+function loadLanguagesList(){
+  db.ref('animeLanguages').once('value').then(snap=>{
+    const langs=snap.val()||{};
+    const c=$('#languages-list');
+    if(!Object.keys(langs).length){c.innerHTML='<p class="text-sm text-secondary">No languages added</p>';return}
+    c.innerHTML=`<table class="admin-table"><thead><tr><th>Anime ID</th><th>Languages</th><th>Actions</th></tr></thead><tbody>
+      ${Object.entries(langs).map(([id,langArr])=>{
+        const langStr=Array.isArray(langArr)?langArr.join(', '):(typeof langArr==='string'?langArr:JSON.stringify(langArr));
+        return`<tr><td>${id}</td><td>${escapeHtml(langStr)}</td>
+        <td class="cell-actions"><button class="btn btn-danger btn-sm admin-del-lang" data-id="${id}">${svgIcon('trash',12,12)}</button></td></tr>`;
+      }).join('')}</tbody></table>`;
+    $$('.admin-del-lang').forEach(b=>b.addEventListener('click',()=>{
+      if(!confirm('Delete?'))return;
+      db.ref('animeLanguages/'+b.dataset.id).remove().then(()=>{showToast('Deleted','info');loadLanguagesList();});
+    }));
+  }).catch(err=>{$('#languages-list').innerHTML='<p class="text-sm text-danger">Error</p>'});
+}
+
+function saveLanguages(){
+  const id=$('#lang-anime-id').value.trim();
+  const langs=$('#lang-list').value.trim();
+  if(!id||!langs){showToast('Please fill all fields','error');return}
+  const numId=parseInt(id);if(isNaN(numId)||numId<=0){showToast('Invalid Anime ID','error');return}
+  const langArray=langs.split(',').map(l=>l.trim()).filter(l=>l);
+  db.ref('animeLanguages/'+numId).set(langArray).then(()=>{
+    showToast('Languages saved','success');
+    $('#lang-anime-id').value='';$('#lang-list').value='';
+    loadLanguagesList();
+  }).catch(err=>showToast('Failed: '+err.message,'error'));
+}
+
+function banUser(uid,name){
+  if(!state.isAdmin)return;
+  openModal('Ban User',`<p>Ban <strong>${escapeHtml(name)}</strong> (${uid})?</p>`,true,()=>{
+    db.ref('bannedUsers/'+uid).set({name:name||'',bannedAt:Date.now()}).then(()=>showToast('User banned','success'));
+  });
+}
+
+// ============================================================
+//  SETTINGS
+// ============================================================
+$('#settings-btn').addEventListener('click',()=>{
+  openModal('Settings',`<button class="btn btn-ghost w-full mb-8" id="modal-clear-cache">Clear Cache</button><button class="btn btn-ghost w-full mb-8" id="modal-logout">Logout</button>`,false);
+  $('#modal-logout').addEventListener('click',()=>{state.user=null;localStorage.clear();closeModal();showToast('Logged out','info');renderProfile();});
+  $('#modal-clear-cache').addEventListener('click',()=>{clearCache();closeModal();showToast('Cache cleared','success');});
+});
+
+// ============================================================
+//  BANNED CHECK
+// ============================================================
+async function isBanned(){
+  if(!state.user?.id)return false;
+  if(state.user.id.startsWith('guest_'))return false;
+  const snap=await db.ref('bannedUsers/'+state.user.id).once('value');
+  return snap.exists();
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function initApp(){
+  const banned=await isBanned();
+  if(banned){
+    document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;text-align:center;background:var(--bg)"><h1 style="font-family:Outfit;font-weight:800;font-size:24px;margin-bottom:8px;color:var(--text)">Access Denied</h1><p style="color:var(--text2)">Your account has been banned.</p></div>';
+    return;
+  }
+
+  if(state.user&&!state.user.id.startsWith('guest_')){
+    db.ref('users/'+state.user.id).set({
+      name:(state.user.firstName+' '+state.user.lastName).trim(),
+      username:state.user.username,
+      photoUrl:state.user.photoUrl,
+      lastSeen:Date.now()
+    });
+  }
+
+  db.ref('animeChannels').once('value').then(snap=>{
+    state.channels=snap.val()||{};
+  });
+
+  // Load all comments into state
+  db.ref('comments').on('value',snap=>{
+    const val=snap.val()||{};
+    Object.entries(val).forEach(([animeId,comments])=>{
+      state.comments[animeId]=Object.entries(comments).map(([id,v])=>({id,...v})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    });
+    if(state.tab==='profile')renderProfile();
+  });
+
+  $('#admin-badge').classList.toggle('hidden',!state.isAdmin);
+  $('#sidebar-admin-section').style.display=state.isAdmin?'block':'none';
+
+  // Update user UI
+  updateUserUI();
+
+  switchTab('home');
+  renderFilterChips();
+  loadWatchlist();
+  renderProfile();
+
+  setTimeout(()=>{
+    updateTabIndicator();
+  },200);
+}
+
+// ============================================================
+//  BACK BUTTON
+// ============================================================
+document.addEventListener('keydown',e=>{
+  if(e.key==='Backspace'&&state.currentAnime&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){
+    e.preventDefault();closeAnimeDetail();
+  }
+});
+
+// ============================================================
+//  START
+// ============================================================
+document.addEventListener('DOMContentLoaded',runLoader);
+</script>
+</body>
+</html>
