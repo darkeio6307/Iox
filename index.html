@@ -3072,6 +3072,8 @@ async function isBanned(){
 //  INIT
 // ============================================================
 async function initApp(){
+  switchTab('home');
+  renderFilterChips();
   const banned=await isBanned();
   if(banned){
     document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;text-align:center;background:var(--bg)"><h1 style="font-family:Outfit;font-weight:800;font-size:24px;margin-bottom:8px;color:var(--text)">Access Denied</h1><p style="color:var(--text2)">Your account has been banned.</p></div>';
