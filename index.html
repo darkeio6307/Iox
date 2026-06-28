@@ -2868,17 +2868,19 @@ function showAddChannelModal(){
     <div class="input-wrap mb-12"><label>Search Anime Name</label><input type="text" class="input-field" id="admin-anime-search" placeholder="Type anime name..."><div class="admin-search-results hidden" id="admin-search-results"></div></div>
     <div class="input-wrap mb-12"><label>Anime ID(s) - comma separated</label><input type="text" class="input-field" id="ch-anime-id" placeholder="16498, 25777, 99147"></div>
     <div class="input-wrap mb-12"><label>Channel Link</label><input type="text" class="input-field" id="ch-link" placeholder="https://t.me/..."></div>
+    <div class="input-wrap mb-12"><label>Languages (comma separated)</label><input type="text" class="input-field" id="ch-languages" placeholder="Hindi, English, Sub"></div>
     <div class="flex items-center gap-8 mb-12"><input type="checkbox" id="ch-propagate" checked style="width:18px;height:18px;accent-color:var(--primary)"><label for="ch-propagate" style="font-size:13px;color:var(--text2);font-weight:600">Auto-link to all seasons in franchise</label></div>
   `,true,()=>{
     const idsStr=$('#ch-anime-id').value.trim();
     const link=$('#ch-link').value.trim();
     const propagate=$('#ch-propagate').checked;
+    const langs=$('#ch-languages')?.value.trim();
     if(!idsStr||!link){showToast('Please fill all fields','error');return}
     const ids=idsStr.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0);
     if(!ids.length){showToast('Invalid Anime ID(s)','error');return}
     showToast('Saving channels...','info');
     let savedCount=0;
-    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now()}).then(()=>{savedCount++}));
+    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now(),languages:langs||''}).then(()=>{savedCount++}));
     Promise.all(promises).then(()=>{
       if(propagate&&ids.length===1){
         propagateToFranchise(ids[0],link).then(count=>{
