@@ -1686,7 +1686,7 @@ function runLoader(){
   setTimeout(()=>{
     $('#loader').classList.add('hidden');
     $('#app').classList.remove('hidden');
-    initApp();
+    initApp();setTimeout(()=>{switchTab('home');},500);
   },1800);
 }
 
