@@ -3130,7 +3130,7 @@ document.addEventListener('keydown',e=>{
 // ============================================================
 //  START
 // ============================================================
-document.addEventListener('DOMContentLoaded',runLoader);
+if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.ready();} document.addEventListener('DOMContentLoaded',runLoader);
 </script>
 </body>
 </html>
