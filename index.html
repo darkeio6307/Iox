@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>IOX VAULT</title>
-<link rel="icon" type="image/png" href="/iox-logo.png">
+<link rel="icon" type="image/png" href="./iox-logo.png">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -169,7 +169,7 @@ ul,ol{list-style:none}
 .sidebar-header{display:flex;align-items:center;padding:20px 16px;border-bottom:1px solid var(--glass-border);gap:14px;position:relative;overflow:hidden}
 .sidebar-header::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:0.3;pointer-events:none}
 .sidebar-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;overflow:hidden;flex-shrink:0;box-shadow:0 0 20px var(--primary-glow);border:2px solid rgba(255,255,255,0.5);position:relative;z-index:1}
-.sidebar-avatar img{width:100%;height:100%;object-fit:cover}
+.sidebar-avatar img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .sidebar-user-info{flex:1;min-width:0;position:relative;z-index:1}
 .sidebar-name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .sidebar-handle{font-size:12px;color:var(--text3)}
@@ -247,7 +247,7 @@ ul,ol{list-style:none}
 .anime-card .poster-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.75) 0%,rgba(15,23,42,0.2) 30%,transparent 60%);opacity:0;transition:opacity .35s ease;pointer-events:none;border-radius:var(--radius)}
 .anime-card:hover .poster-wrap{transform:translateY(-6px);box-shadow:var(--card-shadow-hover),0 0 20px rgba(14,165,233,0.12);border-color:rgba(14,165,233,0.25)}
 .anime-card:hover .poster-wrap::after{opacity:1}
-.anime-card .poster-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.anime-card .poster-wrap img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;transition:transform .5s ease}
 .anime-card:hover .poster-wrap img{transform:scale(1.08)}
 .anime-card .card-title-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;z-index:3;opacity:0;transform:translateY(8px);transition:all .35s ease;pointer-events:none}
 .anime-card:hover .card-title-overlay{opacity:1;transform:translateY(0)}
@@ -264,7 +264,7 @@ ul,ol{list-style:none}
 .anime-card-grid .poster-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.75) 0%,rgba(15,23,42,0.2) 30%,transparent 60%);opacity:0;transition:opacity .35s ease;pointer-events:none;border-radius:var(--radius)}
 .anime-card-grid:hover .poster-wrap{transform:translateY(-6px);box-shadow:var(--card-shadow-hover),0 0 20px rgba(14,165,233,0.12);border-color:rgba(14,165,233,0.25)}
 .anime-card-grid:hover .poster-wrap::after{opacity:1}
-.anime-card-grid .poster-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.anime-card-grid .poster-wrap img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;transition:transform .5s ease}
 .anime-card-grid:hover .poster-wrap img{transform:scale(1.08)}
 .anime-card-grid .card-title-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;z-index:3;opacity:0;transform:translateY(8px);transition:all .35s ease;pointer-events:none}
 .anime-card-grid:hover .card-title-overlay{opacity:1;transform:translateY(0)}
@@ -286,7 +286,7 @@ ul,ol{list-style:none}
 .section-header .view-all:active{transform:scale(0.95)}
 
 /* Chip */
-.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:24px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .2s;border:1px solid var(--glass-border);background:var(--bg2);color:var(--text2);cursor:pointer;user-select:none;backdrop-filter:blur(8px)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:24px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .2s;border:1px solid var(--glass-border);background:var(--bg2);color:var(--text2);cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none;backdrop-filter:blur(8px)}
 .chip.active{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border-color:transparent;box-shadow:0 4px 16px var(--primary-glow)}
 .chip:active{transform:scale(0.95)}
 
@@ -331,7 +331,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .admin-search-results{max-height:200px;overflow-y:auto;background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-top:4px;box-shadow:0 8px 24px rgba(14,165,233,0.1);z-index:20;position:relative}
 .admin-search-item{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;border-bottom:1px solid var(--glass-border);transition:background .2s;display:flex;align-items:center;gap:10px;color:var(--text)}
 .admin-search-item:hover{background:var(--bg3)}
-.admin-search-item img{width:32px;height:48px;object-fit:cover;border-radius:6px}
+.admin-search-item img{width:32px;height:48px;-o-object-fit:cover;object-fit:cover;border-radius:6px}
 .admin-search-item .asi-info{flex:1;min-width:0}
 .admin-search-item .asi-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .admin-search-item .asi-meta{font-size:11px;color:var(--text3);font-weight:500}
@@ -343,12 +343,12 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 #anime-detail::-webkit-scrollbar{width:0}
 #anime-detail.open{transform:translateX(0)}
 .detail-banner{position:relative;height:260px;overflow:hidden}
-.detail-banner .banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(8px) brightness(0.5);transform:scale(1.1);transition:all .5s ease}
+.detail-banner .banner-img{position:absolute;inset:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover;filter:blur(8px) brightness(0.5);transform:scale(1.1);transition:all .5s ease}
 .detail-banner .banner-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,var(--bg) 100%)}
 .detail-header{position:relative;display:flex;gap:16px;padding:0 16px;margin-top:-80px}
 .detail-poster{width:130px;height:195px;border-radius:var(--radius);overflow:hidden;flex-shrink:0;box-shadow:0 16px 48px rgba(0,0,0,0.15);border:2px solid rgba(255,255,255,0.5);transition:all .3s ease;position:relative;z-index:2}
 .detail-poster:hover{transform:perspective(1000px) rotateY(-5deg) rotateX(5deg) scale(1.02);box-shadow:0 20px 56px rgba(14,165,233,0.15)}
-.detail-poster img{width:100%;height:100%;object-fit:cover}
+.detail-poster img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .detail-title-wrap{flex:1;padding-top:80px}
 .detail-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;line-height:1.2;margin-bottom:8px;color:var(--text)}
 .detail-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -362,7 +362,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .stats-bar{display:flex;gap:16px;padding:0 16px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .stats-bar::-webkit-scrollbar{display:none}
 .stat-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:60px;padding:8px 12px;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--glass-border)}
-.stat-value{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.stat-value{font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;color:var(--text);word-break:break-all;text-align:center}
 .stat-label{font-size:11px;color:var(--text3);font-weight:500}
 
 /* Tabs */
@@ -381,7 +381,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
    ============================================================ */
 .comments-section{padding:16px 0;border-top:1px solid var(--glass-border);margin-top:8px}
 .comments-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.comments-header h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.comments-header h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;color:var(--text);word-break:break-all;text-align:center}
 .comments-count{font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;font-weight:600}
 
 /* Comment composer */
@@ -389,7 +389,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .comment-composer:focus-within{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-glow)}
 .comment-composer-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .comment-composer-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex-shrink:0;overflow:hidden}
-.comment-composer-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-composer-avatar img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .comment-composer-name{font-weight:700;font-size:13px;color:var(--text)}
 .comment-composer-input{width:100%;min-height:60px;padding:10px 12px;background:var(--bg3);border:1px solid var(--glass-border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);resize:vertical;margin-bottom:8px;transition:all .2s}
 .comment-composer-input:focus{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-glow)}
@@ -406,7 +406,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .comment-card:hover{border-color:rgba(14,165,233,0.25);box-shadow:var(--card-shadow-hover)}
 .comment-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .comment-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex-shrink:0;overflow:hidden}
-.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-avatar img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .comment-meta{flex:1;min-width:0}
 .comment-author{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;color:var(--text)}
 .comment-author .admin-tag{font-size:9px;background:linear-gradient(135deg,var(--warning),#fbbf24);color:#0f172a;padding:1px 6px;border-radius:4px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
@@ -432,7 +432,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .comment-replies{margin-top:12px;padding-left:16px;border-left:2px solid var(--glass-border)}
 .comment-reply-item{display:flex;gap:10px;margin-bottom:10px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)}
 .comment-reply-avatar{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text2);font-weight:700;font-size:11px;flex-shrink:0;overflow:hidden}
-.comment-reply-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-reply-avatar img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .comment-reply-content{flex:1;min-width:0}
 .comment-reply-author{font-weight:700;font-size:13px;color:var(--text)}
 .comment-reply-text{font-size:13px;color:var(--text2);margin-top:2px;line-height:1.5}
@@ -451,7 +451,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .profile-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none}
 .profile-avatar-wrap{position:relative;z-index:1}
 .profile-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:38px;box-shadow:0 0 50px var(--primary-glow);overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,0.5);position:relative}
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-avatar img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .profile-status-dot{position:absolute;bottom:4px;right:4px;width:16px;height:16px;background:var(--success);border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 8px var(--success)}
 .profile-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;margin-top:14px;position:relative;z-index:1;color:var(--text)}
 .profile-handle{font-size:13px;color:var(--text3);margin-top:2px;position:relative;z-index:1}
@@ -469,7 +469,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .watchlist-card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--card-shadow)}
 .watchlist-card:active{transform:scale(0.97)}
 .watchlist-card .wl-poster{aspect-ratio:2/3;overflow:hidden;position:relative}
-.watchlist-card .wl-poster img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.watchlist-card .wl-poster img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;transition:transform .3s ease}
 .watchlist-card:hover .wl-poster img{transform:scale(1.05)}
 .watchlist-card .wl-info{padding:12px}
 .watchlist-card .wl-title{font-size:13px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;font-family:'Outfit',sans-serif;color:var(--text)}
@@ -509,7 +509,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .schedule-item:active{transform:scale(0.98)}
 .schedule-item:hover{border-color:rgba(14,165,233,0.25);box-shadow:var(--card-shadow-hover)}
 .schedule-poster{width:60px;height:85px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;background:var(--bg3);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-.schedule-poster img{width:100%;height:100%;object-fit:cover}
+.schedule-poster img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
 .schedule-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .schedule-title{font-size:14px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
 .schedule-meta{font-size:11px;color:var(--text3);margin-bottom:2px}
@@ -603,7 +603,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
 .char-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .char-card{display:flex;gap:10px;background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;transition:all .2s;box-shadow:var(--card-shadow)}
 .char-card:hover{border-color:rgba(14,165,233,0.25)}
-.char-card img{width:60px;height:80px;object-fit:cover;flex-shrink:0}
+.char-card img{width:60px;height:80px;-o-object-fit:cover;object-fit:cover;flex-shrink:0}
 .char-info{padding:10px 10px 10px 0;flex:1;min-width:0}
 .char-name{font-size:13px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
 .char-role{font-size:11px;color:var(--text3);margin-top:2px}
@@ -1363,7 +1363,7 @@ const ANILIST_URL="https://graphql.anilist.co";
 const FORMAT_FILTER=["TV","MOVIE","ONA","OVA","SPECIAL"];
 
 const state={
-  tab:'home',
+  tab:'',
   prevTab:'',
   isAdmin:false,
   user:null,
@@ -1686,7 +1686,7 @@ function runLoader(){
   setTimeout(()=>{
     $('#loader').classList.add('hidden');
     $('#app').classList.remove('hidden');
-    initApp();
+    initApp();setTimeout(()=>{switchTab('home');},500);
   },1800);
 }
 
@@ -2637,7 +2637,8 @@ async function loadSchedule(){
     let html='';
     const today=new Date().getDay();
     
-    for(let day=0;day<7;day++){
+    const dayOrder=[...Array(7).keys()].sort((a,b)=>a===today?-1:b===today?1:((a-today+7)%7)-((b-today+7)%7));
+    for(const day of dayOrder){
       const items=grouped[day];
       if(!items.length)continue;
       
@@ -2868,18 +2869,19 @@ function showAddChannelModal(){
     <div class="input-wrap mb-12"><label>Search Anime Name</label><input type="text" class="input-field" id="admin-anime-search" placeholder="Type anime name..."><div class="admin-search-results hidden" id="admin-search-results"></div></div>
     <div class="input-wrap mb-12"><label>Anime ID(s) - comma separated</label><input type="text" class="input-field" id="ch-anime-id" placeholder="16498, 25777, 99147"></div>
     <div class="input-wrap mb-12"><label>Channel Link</label><input type="text" class="input-field" id="ch-link" placeholder="https://t.me/..."></div>
+    <div class="input-wrap mb-12"><label>Languages (comma separated)</label><input type="text" class="input-field" id="ch-languages" placeholder="Hindi, English, Sub"></div>
     <div class="flex items-center gap-8 mb-12"><input type="checkbox" id="ch-propagate" checked style="width:18px;height:18px;accent-color:var(--primary)"><label for="ch-propagate" style="font-size:13px;color:var(--text2);font-weight:600">Auto-link to all seasons in franchise</label></div>
   `,true,()=>{
     const idsStr=$('#ch-anime-id').value.trim();
     const link=$('#ch-link').value.trim();
     const propagate=$('#ch-propagate').checked;
+    const langs=$('#ch-languages')?.value.trim();
     if(!idsStr||!link){showToast('Please fill all fields','error');return}
     const ids=idsStr.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0);
     if(!ids.length){showToast('Invalid Anime ID(s)','error');return}
-    const chLangs=($('#ch-languages')||{value:''}).value.trim();
     showToast('Saving channels...','info');
     let savedCount=0;
-    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now(),languages:chLangs}).then(()=>{savedCount++}));
+    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now(),languages:langs||''}).then(()=>{savedCount++}));
     Promise.all(promises).then(()=>{
       if(propagate&&ids.length===1){
         propagateToFranchise(ids[0],link).then(count=>{
@@ -3073,6 +3075,8 @@ async function isBanned(){
 //  INIT
 // ============================================================
 async function initApp(){
+  switchTab('home');
+  renderFilterChips();
   const banned=await isBanned();
   if(banned){
     document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;text-align:center;background:var(--bg)"><h1 style="font-family:Outfit;font-weight:800;font-size:24px;margin-bottom:8px;color:var(--text)">Access Denied</h1><p style="color:var(--text2)">Your account has been banned.</p></div>';
@@ -3129,7 +3133,7 @@ document.addEventListener('keydown',e=>{
 // ============================================================
 //  START
 // ============================================================
-document.addEventListener('DOMContentLoaded',runLoader);
+if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.ready();} document.addEventListener('DOMContentLoaded',runLoader);
 </script>
 </body>
 </html>
