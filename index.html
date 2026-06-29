@@ -121,12 +121,12 @@ ul,ol{list-style:none}
 /* ============================================================
    LOADER / SPLASH SCREEN WITH IOX VAULT LOGO
    ============================================================ */
-#loader{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease}
+#loader{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease}
 #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .loader-svg-wrap{width:120px;height:120px;margin-bottom:24px;position:relative;animation:svgPulse 2s ease-in-out infinite}
 .loader-svg-wrap svg{width:100%;height:100%;animation:svgGlow 2s ease-in-out infinite}
 .loader-svg-ring{position:absolute;inset:-16px;border:2px solid transparent;border-top-color:var(--logo-red);border-right-color:var(--primary);border-radius:50%;animation:rotate 2s linear infinite}
-.loader-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:32px;background:linear-gradient(90deg,var(--logo-red),var(--logo-silver),var(--primary));background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;opacity:0;transform:translateY(10px);transition:all .5s ease}
+.loader-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:32px;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff);background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;opacity:0;transform:translateY(10px);transition:all .5s ease}
 .loader-title.visible{opacity:1;transform:translateY(0)}
 .loader-sub{font-size:13px;color:var(--text3);opacity:0;transition:opacity .4s ease .2s;font-weight:500}
 .loader-sub.visible{opacity:1}
@@ -899,7 +899,7 @@ textarea.input-field{height:auto;padding:12px 14px;min-height:100px}
           <text x="116" y="88" font-family="Outfit,sans-serif" font-weight="900" font-size="80" fill="url(#ioxSilver)">X</text>
         </svg>
       </div>
-      <span class="header-title" id="header-title">IOX VAULT</span>
+      <span class="header-title" id="header-title">IOX VAULT <span style="font-size:10px;font-weight:600;letter-spacing:2px;animation:shimmer 3s linear infinite;background:linear-gradient(90deg,var(--logo-red),var(--primary));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent">by INFINITE ANIME</span></span>
       <span class="header-admin-badge hidden" id="admin-badge">ADMIN</span>
     </div>
     <div class="header-actions">
