@@ -1840,7 +1840,7 @@ function renderSkeletonGrid(id,n=8){
 $('#home-enter-btn').addEventListener('click',()=>{
   showPageTransition();
   setTimeout(()=>{
-    state.homeEntered=false;
+    state.homeEntered=true;
     $('#home-enter-wrap').style.display='none';
     $('#home-content').style.display='block';
     loadHome().then(()=>{
