@@ -1840,7 +1840,7 @@ function renderSkeletonGrid(id,n=8){
 $('#home-enter-btn').addEventListener('click',()=>{
   showPageTransition();
   setTimeout(()=>{
-    state.homeEntered=true;
+    state.homeEntered=false;
     $('#home-enter-wrap').style.display='none';
     $('#home-content').style.display='block';
     loadHome().then(()=>{
@@ -2876,9 +2876,10 @@ function showAddChannelModal(){
     if(!idsStr||!link){showToast('Please fill all fields','error');return}
     const ids=idsStr.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0);
     if(!ids.length){showToast('Invalid Anime ID(s)','error');return}
+    const chLangs=($('#ch-languages')||{value:''}).value.trim();
     showToast('Saving channels...','info');
     let savedCount=0;
-    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now()}).then(()=>{savedCount++}));
+    const promises=ids.map(id=>db.ref('animeChannels/'+id).set({channelLink:link,addedBy:state.user?.id||'unknown',addedAt:Date.now(),languages:chLangs}).then(()=>{savedCount++}));
     Promise.all(promises).then(()=>{
       if(propagate&&ids.length===1){
         propagateToFranchise(ids[0],link).then(count=>{
