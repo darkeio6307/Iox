@@ -2637,7 +2637,8 @@ async function loadSchedule(){
     let html='';
     const today=new Date().getDay();
     
-    for(let day=0;day<7;day++){
+    const dayOrder=[...Array(7).keys()].sort((a,b)=>a===today?-1:b===today?1:((a-today+7)%7)-((b-today+7)%7));
+    for(const day of dayOrder){
       const items=grouped[day];
       if(!items.length)continue;
       
